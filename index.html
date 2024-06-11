@@ -191,13 +191,13 @@
                     target = '';
                     switch(first_dissection[i]) {
                         case 0:
-                            first_step = first_step.concat(' ', neededSymbols.left[0], ' on left and');
+                            first_step = first_step.concat(' ', neededSymbols.left[0], ' on <b>left</b> and');
                             break;
                         case 1:
-                            first_step = first_step.concat(' ', neededSymbols.middle[0], ' on middle and');
+                            first_step = first_step.concat(' ', neededSymbols.middle[0], ' on <b>middle</b> and');
                             break;
                         case 2:
-                            first_step = first_step.concat(' ', neededSymbols.right[0], ' on right and');
+                            first_step = first_step.concat(' ', neededSymbols.right[0], ' on <b>right</b> and');
                             break;
                         default:
                             break;
@@ -222,13 +222,13 @@
                     target = '';
                     switch(second_dissection[i]) {
                         case 0:
-                            second_step = second_step.concat(' ', neededSymbols.left[1], ' on left and');
+                            second_step = second_step.concat(' ', neededSymbols.left[1], ' on <b>left</b> and');
                             break;
                         case 1:
-                            second_step = second_step.concat(' ', neededSymbols.middle[1], ' on middle and');
+                            second_step = second_step.concat(' ', neededSymbols.middle[1], ' on <b>middle</b> and');
                             break;
                         case 2:
-                            second_step = second_step.concat(' ', neededSymbols.right[0], ' on right and');
+                            second_step = second_step.concat(' ', neededSymbols.right[0], ' on <b>right</b> and');
                             break;
                         default:
                             break;
@@ -247,13 +247,13 @@
                     target = '';
                     switch(third_dissection[i]) {
                         case 0:
-                            third_step = third_step.concat(' ', neededSymbols.left[1], ' on left and');
+                            third_step = third_step.concat(' ', neededSymbols.left[1], ' on <b>left</b> and');
                             break;
                         case 1:
-                            third_step = third_step.concat(' ', neededSymbols.middle[1], ' on middle and');
+                            third_step = third_step.concat(' ', neededSymbols.middle[1], ' on <b>middle</b> and');
                             break;
                         case 2:
-                            third_step = third_step.concat(' ', neededSymbols.right[1], ' on right and');
+                            third_step = third_step.concat(' ', neededSymbols.right[1], ' on <b>right</b> and');
                             break;
                         default:
                             break;
@@ -264,7 +264,7 @@
 
             return steps.join('<br>');
         }
-        return 'none';
+        return 'None';
       }
     }"
         x-init="() => {
