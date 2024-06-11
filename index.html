@@ -1,0 +1,365 @@
+<html>
+    <head>
+        <title>Verity</title>
+
+        <script type="module" src="https://cdn.skypack.dev/twind/shim"></script>
+        <script
+            defer
+            src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+        ></script>
+        <style>
+            [x-cloak] {
+                display: none !important;
+            }
+        </style>
+    </head>
+    <body
+        x-data="{
+      twoD: ['Circle', 'Square', 'Triangle'],
+      threeD: [
+        {name: 'Cube', symbol1: 'Square', symbol2: 'Square', isPure: true},
+        {name: 'Sphere', symbol1: 'Circle', symbol2: 'Circle', isPure: true},
+        {name: 'Pyramid', symbol1: 'Triangle', symbol2: 'Triangle', isPure: true},
+        {name: 'Cylinder', symbol1: 'Circle', symbol2: 'Square', isPure: false},
+        {name: 'Cone', symbol1: 'Circle', symbol2: 'Triangle', isPure: false},
+        {name: 'Prism', symbol1: 'Triangle', symbol2: 'Square', isPure: false},
+      ],
+      insideCallouts: '',
+      insideGuardianLeft: '',
+      insideGuardianMiddle: '',
+      insideGuardianRight: '',
+      outsideGuardianLeft: '',
+      outsideGuardianMiddle: '',
+      outsideGuardianRight: '',
+
+      resetForm: function(){
+        this.insideCallouts = '';
+        this.insideGuardianLeft = '';
+        this.insideGuardianMiddle = '';
+        this.insideGuardianRight = '';
+        this.outsideGuardianLeft = '';
+        this.outsideGuardianMiddle = '';
+        this.outsideGuardianRight = '';
+      },
+
+      setInsideCallouts: function() {
+        if(this.insideCallouts.length === 3) {
+          let leftChar = this.insideCallouts[0].toLowerCase();
+          let middleChar = this.insideCallouts[1].toLowerCase();
+          let rightChar = this.insideCallouts[2].toLowerCase();
+          this.insideGuardianLeft = this.twoD.find(item => item[0].toLowerCase() === leftChar);
+          this.insideGuardianMiddle = this.twoD.find(item => item[0].toLowerCase() === middleChar);
+          this.insideGuardianRight = this.twoD.find(item => item[0].toLowerCase() === rightChar);
+        }
+      },
+
+      setInsideCalloutsFromSelect: function() {
+        if(this.insideGuardianLeft && this.insideGuardianMiddle && this.insideGuardianRight) {
+          this.insideCallouts = this.insideGuardianLeft[0].toUpperCase() + this.insideGuardianMiddle[0].toUpperCase() + this.insideGuardianRight[0].toUpperCase();
+        }
+      },
+
+      neededThreeD: function() {
+        let retVal = [];
+        if(this.insideGuardianLeft && this.insideGuardianMiddle && this.insideGuardianRight) {
+          retVal = [
+            this.threeD.find(item => !item.isPure && item.symbol1 !== this.insideGuardianLeft && item.symbol2 !== this.insideGuardianLeft),
+            this.threeD.find(item => !item.isPure && item.symbol1 !== this.insideGuardianMiddle && item.symbol2 !== this.insideGuardianMiddle),
+            this.threeD.find(item => !item.isPure && item.symbol1 !== this.insideGuardianRight && item.symbol2 !== this.insideGuardianRight)
+          ]
+        }
+        return retVal;
+      },
+
+      neededSymbols: function() {
+        let retVal = {};
+
+        
+
+        if(this.insideGuardianLeft) {
+          retVal.left = [];
+          if(this.outsideGuardianLeft) {
+            const leftObject = this.threeD.find(item => item.name === this.outsideGuardianLeft);
+            if(leftObject.symbol1 === this.insideGuardianLeft) {
+              retVal.left.push(this.insideGuardianLeft);
+            }
+            if(leftObject.symbol2 === this.insideGuardianLeft) {
+              retVal.left.push(this.insideGuardianLeft);
+            }
+            if(retVal.left.length === 0 && leftObject.symbol1 === leftObject.symbol2) {
+                retVal.left.push(leftObject.symbol1);
+            }
+          }
+        }
+        if(this.insideGuardianMiddle) {
+          retVal.middle = [];
+          if(this.outsideGuardianMiddle) {
+            const middleObject = this.threeD.find(item => item.name === this.outsideGuardianMiddle);
+            if(middleObject.symbol1 === this.insideGuardianMiddle) {
+              retVal.middle.push(this.insideGuardianMiddle);
+            }
+            if(middleObject.symbol2 === this.insideGuardianMiddle) {
+              retVal.middle.push(this.insideGuardianMiddle);
+            }
+            if(retVal.middle.length === 0 && middleObject.symbol1 === middleObject.symbol2) {
+                retVal.middle.push(middleObject.symbol1);
+            }
+          }
+        }
+        if(this.insideGuardianRight) {
+          retVal.right = [];
+          if(this.outsideGuardianRight) {
+            const rightObject = this.threeD.find(item => item.name === this.outsideGuardianRight);
+            if(rightObject.symbol1 === this.insideGuardianRight) {
+              retVal.right.push(this.insideGuardianRight);
+            }
+            if(rightObject.symbol2 === this.insideGuardianRight) {
+              retVal.right.push(this.insideGuardianRight);
+            }
+            if(retVal.right.length === 0 && rightObject.symbol1 === rightObject.symbol2) {
+                retVal.right.push(rightObject.symbol1);
+            }
+          }
+        }
+        if(this.insideGuardianLeft && this.insideGuardianMiddle && this.insideGuardianRight) {
+            if(this.outsideGuardianLeft && this.outsideGuardianMiddle && this.outsideGuardianRight) {
+                totalShapes = retVal.left.length + retVal.right.length + retVal.middle.length;
+                
+                if(totalShapes % 2 === 1) {
+                    originalLeft = this.threeD.find(item => item.name === this.outsideGuardianLeft);
+                    currentLeft1 = this.threeD.find(item => item.symbol1 === originalLeft.symbol1 && item.symbol2 === retVal.middle[0] && item.isPure);
+                    currentLeft2 = this.threeD.find(item => item.symbol2 === originalLeft.symbol2 && item.symbol1 === retVal.middle[0] && item.isPure);
+
+                    originalMiddle = this.threeD.find(item => item.name === this.outsideGuardianMiddle);
+                    currentMiddle1 = this.threeD.find(item => item.symbol1 === originalMiddle.symbol1 && item.symbol2 === retVal.left[0] && item.isPure);
+                    currentMiddle2 = this.threeD.find(item => item.symbol2 === originalMiddle.symbol2 && item.symbol1 === retVal.left[0] && item.isPure);
+
+                    if(currentLeft1) {
+                        retVal.left.push(currentLeft1.symbol1);
+                    } else if(currentLeft2) {
+                        retVal.left.push(currentLeft2.symbol1);
+                    }
+
+                    if(currentMiddle1) {
+                        retVal.middle.push(currentMiddle1.symbol1);
+                    } else if(currentMiddle2) {
+                        retVal.middle.push(currentMiddle2.symbol1);
+                    }
+                }
+            }
+        }
+        return retVal;
+      },
+      displayNeededSymbols: function(symbolText) {
+        return symbolText.join(' <br/> ');
+      }
+    }"
+        x-init="() => {}"
+    >
+        <div class="w-full flex flex-col items-center pt-8">
+            <div class="flex flex-col max-w-[600px]">
+                <div class="input-group flex flex-col">
+                    <label class="whitespace-nowrap font-bold" for="nameField"
+                        >Inside Callouts</label
+                    >
+                    <input
+                        class="p-2 border-2 border-gray-300 rounded-md"
+                        type="text"
+                        placeholder="CST"
+                        id="nameField"
+                        x-model="insideCallouts"
+                        x-on:keyup="setInsideCallouts()"
+                    />
+                </div>
+                <div class="flex flex-row gap-4">
+                    <div class="w-1/3 flex flex-col">
+                        <label class="whitespace-nowrap" for="guard1"
+                            >Inside Left</label
+                        >
+                        <select
+                            class="rounded-md border-2 border-gray-300 p-2"
+                            x-on:change="setInsideCalloutsFromSelect()"
+                            id="guard1"
+                            x-model="insideGuardianLeft"
+                        >
+                            <option value=""></option>
+                            <template x-for="item in twoD" :key="item">
+                                <option
+                                    x-bind:value="item"
+                                    x-text="item"
+                                ></option>
+                            </template>
+                        </select>
+                    </div>
+                    <div class="w-1/3 flex flex-col">
+                        <label class="whitespace-nowrap" for="guard2"
+                            >Inside Middle</label
+                        >
+                        <select
+                            class="rounded-md border-2 border-gray-300 p-2"
+                            x-on:change="setInsideCalloutsFromSelect()"
+                            id="guard2"
+                            x-model="insideGuardianMiddle"
+                        >
+                            <option value=""></option>
+                            <template x-for="item in twoD" :key="item">
+                                <option
+                                    x-bind:value="item"
+                                    x-text="item"
+                                ></option>
+                            </template>
+                        </select>
+                    </div>
+                    <div class="w-1/3 flex flex-col">
+                        <label class="whitespace-nowrap" for="guard3"
+                            >Inside Right</label
+                        >
+                        <select
+                            class="rounded-md border-2 border-gray-300 p-2"
+                            x-on:change="setInsideCalloutsFromSelect()"
+                            id="guard3"
+                            x-model="insideGuardianRight"
+                        >
+                            <option value=""></option>
+                            <template x-for="item in twoD" :key="item">
+                                <option
+                                    x-bind:value="item"
+                                    x-text="item"
+                                ></option>
+                            </template>
+                        </select>
+                    </div>
+                </div>
+                <label class="whitespace-nowrap font-bold pt-4" for="nameField">
+                    Outside Callouts
+                </label>
+
+                <div class="flex flex-row gap-4">
+                    <div class="flex flex-col w-1/3">
+                        <label class="whitespace-nowrap" for="guard4"
+                            >Outside Left</label
+                        >
+                        <select
+                            class="rounded-md border-2 border-gray-300 p-2"
+                            id="guard4"
+                            x-model="outsideGuardianLeft"
+                        >
+                            <option value=""></option>
+                            <template x-for="item in threeD" :key="item.name">
+                                <option
+                                    x-bind:value="item.name"
+                                    x-text="item.name"
+                                ></option>
+                            </template>
+                        </select>
+                    </div>
+                    <div class="flex flex-col w-1/3">
+                        <label class="whitespace-nowrap" for="guard5"
+                            >Outside Middle</label
+                        >
+                        <select
+                            class="rounded-md border-2 border-gray-300 p-2"
+                            id="guard5"
+                            x-model="outsideGuardianMiddle"
+                        >
+                            <option value=""></option>
+                            <template x-for="item in threeD" :key="item.name">
+                                <option
+                                    x-bind:value="item.name"
+                                    x-text="item.name"
+                                ></option>
+                            </template>
+                        </select>
+                    </div>
+                    <div class="flex flex-col w-1/3">
+                        <label class="whitespace-nowrap" for="guard6"
+                            >Outside Right</label
+                        >
+                        <select
+                            class="rounded-md border-2 border-gray-300 p-2"
+                            id="guard6"
+                            x-model="outsideGuardianRight"
+                        >
+                            <option value=""></option>
+                            <template x-for="item in threeD" :key="item.name">
+                                <option
+                                    x-bind:value="item.name"
+                                    x-text="item.name"
+                                ></option>
+                            </template>
+                        </select>
+                    </div>
+                </div>
+                <div class="w-full flex flex-row justify-center py-6">
+                    <div
+                        x-on:click="resetForm()"
+                        class="bg-purple-800 rounded-md px-4 py-2 cursor-pointer text-lg text-white hover:bg-opacity-80"
+                        type="button"
+                    >
+                        Reset Form
+                    </div>
+                </div>
+
+                <div class="flex flex-col border-2 pt-2 pb-4 px-4 rounded-md">
+                    <div class="font-bold text-lg">Dissections</div>
+                    <div class="w-full flex flex-row">
+                        <div class="flex flex-col w-1/3">
+                            <span
+                                class="text-purple-800 font-bold"
+                                x-text="neededThreeD()[0]?.name"
+                            >
+                            </span>
+                            <span
+                                x-html="displayNeededSymbols(neededSymbols()?.left ?? [])"
+                            ></span>
+                        </div>
+                        <div class="flex flex-col gap-2 w-1/3">
+                            <span
+                                class="text-purple-800 font-bold"
+                                x-text="neededThreeD()[1]?.name"
+                            ></span>
+
+                            <span
+                                x-html="displayNeededSymbols(neededSymbols()?.middle ?? [])"
+                            ></span>
+                        </div>
+                        <div class="flex flex-col gap-2 w-1/3">
+                            <span
+                                class="text-purple-800 font-bold"
+                                x-text="neededThreeD()[2]?.name"
+                            ></span>
+                            <span
+                                x-html="displayNeededSymbols(neededSymbols()?.right ?? [])"
+                            ></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div
+                class="flex flex-col gap-2 mt-12 border-2 border-gray-300 rounded-md p-4 justify-center text-center"
+            >
+                <div>Contributors</div>
+                <div class="flex flex-row items-center gap-2">
+                    seratne
+                    <a href="https://www.reddit.com/u/seratne/"
+                        ><img
+                            src="./images/reddit.svg"
+                            alt="Reddit"
+                            style="height: 1rem"
+                        />
+                    </a>
+                </div>
+                <div class="flex flex-row items-center gap-2">
+                    inertxenon
+                    <a href="https://www.reddit.com/u/inertxenon/"
+                        ><img
+                            src="./images/reddit.svg"
+                            alt="Reddit"
+                            style="height: 1rem"
+                        />
+                    </a>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
