@@ -15,14 +15,26 @@
     </head>
     <body
         x-data="{
+
+        displayOptions: { 
+            showinsideImages: true,
+            showInsideSelect: true,
+            showOutsideImages: true,
+            showOutsideSelect: true, 
+        },
       twoD: ['Circle', 'Square', 'Triangle'],
+      twoDWithImages: [
+        {name: 'Circle', image: '/images/circle.svg'},
+        {name: 'Square', image: '/images/square.svg'},
+        {name: 'Triangle', image: '/images/triangle.svg'},
+      ],
       threeD: [
-        {name: 'Cube', symbol1: 'Square', symbol2: 'Square', isPure: true},
-        {name: 'Sphere', symbol1: 'Circle', symbol2: 'Circle', isPure: true},
-        {name: 'Pyramid', symbol1: 'Triangle', symbol2: 'Triangle', isPure: true},
-        {name: 'Cylinder', symbol1: 'Circle', symbol2: 'Square', isPure: false},
-        {name: 'Cone', symbol1: 'Circle', symbol2: 'Triangle', isPure: false},
-        {name: 'Prism', symbol1: 'Triangle', symbol2: 'Square', isPure: false},
+        {name: 'Cube', symbol1: 'Square', symbol2: 'Square', isPure: true, image: '/images/cube.svg'},
+        {name: 'Sphere', symbol1: 'Circle', symbol2: 'Circle', isPure: true, image: '/images/sphere.svg'},
+        {name: 'Pyramid', symbol1: 'Triangle', symbol2: 'Triangle', isPure: true, image: '/images/pyramid.svg'},
+        {name: 'Cylinder', symbol1: 'Circle', symbol2: 'Square', isPure: false, image: '/images/cylinder.svg'},
+        {name: 'Cone', symbol1: 'Circle', symbol2: 'Triangle', isPure: false, image: '/images/cone.svg'},
+        {name: 'Prism', symbol1: 'Triangle', symbol2: 'Square', isPure: false, image: '/images/prism.svg'},
       ],
       insideCallouts: '',
       insideGuardianLeft: '',
@@ -154,7 +166,21 @@
         return symbolText.join(' <br/> ');
       }
     }"
-        x-init="() => {}"
+        x-init="() => {
+            $watch('displayOptions', (value) => {
+                Object.keys(value).forEach((key) => {
+                    localStorage.setItem(key, value[key]);
+                });
+            });
+            //watch for preference changes and write to localStorage
+            Object.keys(displayOptions).forEach((key) => {
+                const value = localStorage.getItem(key);
+                if (value) {
+                    displayOptions[key] = value === 'true';
+                }
+            });
+
+        }"
     >
         <div class="w-full flex flex-col items-center pt-8">
             <div class="flex flex-col max-w-[600px]">
@@ -172,62 +198,120 @@
                     />
                 </div>
                 <div class="flex flex-row gap-4">
-                    <div class="w-1/3 flex flex-col">
+                    <div class="w-1/3 flex flex-col gap-2">
                         <label class="whitespace-nowrap" for="guard1"
                             >Inside Left</label
                         >
-                        <select
-                            class="rounded-md border-2 border-gray-300 p-2"
-                            x-on:change="setInsideCalloutsFromSelect()"
-                            id="guard1"
-                            x-model="insideGuardianLeft"
-                        >
-                            <option value=""></option>
-                            <template x-for="item in twoD" :key="item">
-                                <option
-                                    x-bind:value="item"
-                                    x-text="item"
-                                ></option>
-                            </template>
-                        </select>
+                        <template x-if="displayOptions.showinsideImages">
+                            <div class="flex flex-row flex-wrap gap-2">
+                                <template x-for="imageUrl in twoDWithImages">
+                                    <div
+                                        class="h-12 w-12 cursor-pointer"
+                                        x-bind:class="insideGuardianLeft === imageUrl.name ? 'border-2 border-blue-800 p-1 bg-gray-300' : 'border-2 border-gray-300 p-1'"
+                                        x-on:click="insideGuardianLeft = imageUrl.name"
+                                    >
+                                        <img
+                                            class="w-10 h-10"
+                                            x-bind:src="imageUrl.image"
+                                            x-bind:alt="imageUrl.name"
+                                        />
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
+
+                        <template x-if="displayOptions.showInsideSelect">
+                            <select
+                                class="rounded-md border-2 border-gray-300 p-2"
+                                x-on:change="setInsideCalloutsFromSelect()"
+                                id="guard1"
+                                x-model="insideGuardianLeft"
+                            >
+                                <option value=""></option>
+                                <template x-for="item in twoD" :key="item">
+                                    <option
+                                        x-bind:value="item"
+                                        x-text="item"
+                                    ></option>
+                                </template>
+                            </select>
+                        </template>
                     </div>
-                    <div class="w-1/3 flex flex-col">
+                    <div class="w-1/3 flex flex-col gap-2">
                         <label class="whitespace-nowrap" for="guard2"
                             >Inside Middle</label
                         >
-                        <select
-                            class="rounded-md border-2 border-gray-300 p-2"
-                            x-on:change="setInsideCalloutsFromSelect()"
-                            id="guard2"
-                            x-model="insideGuardianMiddle"
-                        >
-                            <option value=""></option>
-                            <template x-for="item in twoD" :key="item">
-                                <option
-                                    x-bind:value="item"
-                                    x-text="item"
-                                ></option>
-                            </template>
-                        </select>
+                        <template x-if="displayOptions.showinsideImages">
+                            <div class="flex flex-row flex-wrap gap-2">
+                                <template x-for="imageUrl in twoDWithImages">
+                                    <div
+                                        class="h-12 w-12 cursor-pointer"
+                                        x-bind:class="insideGuardianMiddle === imageUrl.name ? 'border-2 border-blue-800 p-1 bg-gray-300' : 'border-2 border-gray-300 p-1'"
+                                        x-on:click="insideGuardianMiddle = imageUrl.name"
+                                    >
+                                        <img
+                                            class="w-10 h-10"
+                                            x-bind:src="imageUrl.image"
+                                            x-bind:alt="imageUrl.name"
+                                        />
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
+                        <template x-if="displayOptions.showInsideSelect">
+                            <select
+                                class="rounded-md border-2 border-gray-300 p-2"
+                                x-on:change="setInsideCalloutsFromSelect()"
+                                id="guard2"
+                                x-model="insideGuardianMiddle"
+                            >
+                                <option value=""></option>
+                                <template x-for="item in twoD" :key="item">
+                                    <option
+                                        x-bind:value="item"
+                                        x-text="item"
+                                    ></option>
+                                </template>
+                            </select>
+                        </template>
                     </div>
-                    <div class="w-1/3 flex flex-col">
+                    <div class="w-1/3 flex flex-col gap-2">
                         <label class="whitespace-nowrap" for="guard3"
                             >Inside Right</label
                         >
-                        <select
-                            class="rounded-md border-2 border-gray-300 p-2"
-                            x-on:change="setInsideCalloutsFromSelect()"
-                            id="guard3"
-                            x-model="insideGuardianRight"
-                        >
-                            <option value=""></option>
-                            <template x-for="item in twoD" :key="item">
-                                <option
-                                    x-bind:value="item"
-                                    x-text="item"
-                                ></option>
-                            </template>
-                        </select>
+                        <template x-if="displayOptions.showinsideImages">
+                            <div class="flex flex-row flex-wrap gap-2">
+                                <template x-for="imageUrl in twoDWithImages">
+                                    <div
+                                        class="h-12 w-12 cursor-pointer"
+                                        x-bind:class="insideGuardianRight === imageUrl.name ? 'border-2 border-blue-800 p-1 bg-gray-300' : 'border-2 border-gray-300 p-1'"
+                                        x-on:click="insideGuardianRight = imageUrl.name"
+                                    >
+                                        <img
+                                            class="w-10 h-10"
+                                            x-bind:src="imageUrl.image"
+                                            x-bind:alt="imageUrl.name"
+                                        />
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
+                        <template x-if="displayOptions.showInsideSelect">
+                            <select
+                                class="rounded-md border-2 border-gray-300 p-2"
+                                x-on:change="setInsideCalloutsFromSelect()"
+                                id="guard3"
+                                x-model="insideGuardianRight"
+                            >
+                                <option value=""></option>
+                                <template x-for="item in twoD" :key="item">
+                                    <option
+                                        x-bind:value="item"
+                                        x-text="item"
+                                    ></option>
+                                </template>
+                            </select>
+                        </template>
                     </div>
                 </div>
                 <label class="whitespace-nowrap font-bold pt-4" for="nameField">
@@ -235,72 +319,131 @@
                 </label>
 
                 <div class="flex flex-row gap-4">
-                    <div class="flex flex-col w-1/3">
+                    <div></div>
+                    <div class="flex flex-col w-1/3 gap-2">
                         <label class="whitespace-nowrap" for="guard4"
                             >Outside Left</label
                         >
-                        <select
-                            class="rounded-md border-2 border-gray-300 p-2"
-                            id="guard4"
-                            x-model="outsideGuardianLeft"
-                        >
-                            <option value=""></option>
-                            <template x-for="item in threeD" :key="item.name">
-                                <option
-                                    x-bind:value="item.name"
-                                    x-text="item.name"
-                                ></option>
-                            </template>
-                        </select>
+                        <template x-if="displayOptions.showOutsideImages">
+                            <div class="flex flex-row flex-wrap gap-2">
+                                <template x-for="imageUrl in threeD">
+                                    <div
+                                        class="h-12 w-12 cursor-pointer"
+                                        x-bind:class="outsideGuardianLeft === imageUrl.name ? 'border-2 border-blue-800 bg-gray-300 p-1' : 'border-2 border-gray-300 p-1'"
+                                        x-on:click="outsideGuardianLeft = imageUrl.name"
+                                    >
+                                        <img
+                                            class="w-10 h-10"
+                                            x-bind:src="imageUrl.image"
+                                            x-bind:alt="imageUrl.name"
+                                        />
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
+                        <template x-if="displayOptions.showOutsideSelect">
+                            <select
+                                class="rounded-md border-2 border-gray-300 p-2"
+                                id="guard4"
+                                x-model="outsideGuardianLeft"
+                            >
+                                <option value=""></option>
+                                <template
+                                    x-for="item in threeD"
+                                    :key="item.name"
+                                >
+                                    <option
+                                        x-bind:value="item.name"
+                                        x-text="item.name"
+                                    ></option>
+                                </template>
+                            </select>
+                        </template>
                     </div>
-                    <div class="flex flex-col w-1/3">
+                    <div class="flex flex-col w-1/3 gap-2">
                         <label class="whitespace-nowrap" for="guard5"
                             >Outside Middle</label
                         >
-                        <select
-                            class="rounded-md border-2 border-gray-300 p-2"
-                            id="guard5"
-                            x-model="outsideGuardianMiddle"
-                        >
-                            <option value=""></option>
-                            <template x-for="item in threeD" :key="item.name">
-                                <option
-                                    x-bind:value="item.name"
-                                    x-text="item.name"
-                                ></option>
-                            </template>
-                        </select>
+                        <template x-if="displayOptions.showOutsideImages">
+                            <div class="flex flex-row flex-wrap gap-2">
+                                <template x-for="imageUrl in threeD">
+                                    <div
+                                        class="h-12 w-12 cursor-pointer"
+                                        x-bind:class="outsideGuardianMiddle === imageUrl.name ? 'border-2 border-blue-800 bg-gray-300 p-1' : 'border-2 border-gray-300 p-1'"
+                                        x-on:click="outsideGuardianMiddle = imageUrl.name"
+                                    >
+                                        <img
+                                            class="w-10 h-10"
+                                            x-bind:src="imageUrl.image"
+                                            x-bind:alt="imageUrl.name"
+                                        />
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
+                        <template x-if="displayOptions.showOutsideSelect">
+                            <select
+                                class="rounded-md border-2 border-gray-300 p-2"
+                                id="guard5"
+                                x-model="outsideGuardianMiddle"
+                            >
+                                <option value=""></option>
+                                <template
+                                    x-for="item in threeD"
+                                    :key="item.name"
+                                >
+                                    <option
+                                        x-bind:value="item.name"
+                                        x-text="item.name"
+                                    ></option>
+                                </template>
+                            </select>
+                        </template>
                     </div>
-                    <div class="flex flex-col w-1/3">
+                    <div class="flex flex-col w-1/3 gap-2">
                         <label class="whitespace-nowrap" for="guard6"
                             >Outside Right</label
                         >
-                        <select
-                            class="rounded-md border-2 border-gray-300 p-2"
-                            id="guard6"
-                            x-model="outsideGuardianRight"
-                        >
-                            <option value=""></option>
-                            <template x-for="item in threeD" :key="item.name">
-                                <option
-                                    x-bind:value="item.name"
-                                    x-text="item.name"
-                                ></option>
-                            </template>
-                        </select>
+                        <template x-if="displayOptions.showOutsideImages">
+                            <div class="flex flex-row flex-wrap gap-2">
+                                <template x-for="imageUrl in threeD">
+                                    <div
+                                        class="h-12 w-12 cursor-pointer"
+                                        x-bind:class="outsideGuardianRight === imageUrl.name ? 'border-2 border-blue-800 bg-gray-300 p-1' : 'border-2 border-gray-300 p-1'"
+                                        x-on:click="outsideGuardianRight = imageUrl.name"
+                                    >
+                                        <img
+                                            class="w-10 h-10"
+                                            x-bind:src="imageUrl.image"
+                                            x-bind:alt="imageUrl.name"
+                                        />
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
+                        <template x-if="displayOptions.showOutsideSelect">
+                            <select
+                                class="rounded-md border-2 border-gray-300 p-2"
+                                id="guard6"
+                                x-model="outsideGuardianRight"
+                            >
+                                <option value=""></option>
+                                <template
+                                    x-for="item in threeD"
+                                    :key="item.name"
+                                >
+                                    <option
+                                        x-bind:value="item.name"
+                                        x-text="item.name"
+                                    ></option>
+                                </template>
+                            </select>
+                        </template>
                     </div>
                 </div>
-                <div class="w-full flex flex-row justify-center py-6">
-                    <div
-                        x-on:click="resetForm()"
-                        class="bg-purple-800 rounded-md px-4 py-2 cursor-pointer text-lg text-white hover:bg-opacity-80"
-                        type="button"
-                    >
-                        Reset Form
-                    </div>
-                </div>
-
-                <div class="flex flex-col border-2 pt-2 pb-4 px-4 rounded-md">
+                <div
+                    class="flex flex-col border-2 pt-2 pb-4 px-4 rounded-md w-full mt-4"
+                >
                     <div class="font-bold text-lg">Dissections</div>
                     <div class="w-full flex flex-row">
                         <div class="flex flex-col w-1/3">
@@ -309,9 +452,11 @@
                                 x-text="neededThreeD()[0]?.name"
                             >
                             </span>
+
                             <span
                                 x-html="displayNeededSymbols(neededSymbols()?.left ?? [])"
-                            ></span>
+                                >-</span
+                            >
                         </div>
                         <div class="flex flex-col gap-2 w-1/3">
                             <span
@@ -335,10 +480,26 @@
                     </div>
                 </div>
             </div>
+
             <div
-                class="flex flex-col gap-2 mt-12 border-2 border-gray-300 rounded-md p-4 justify-center text-center"
+                class="flex flex-col gap-2 mt-12 border-2 border-gray-300 rounded-md p-4 align-center text-center"
             >
-                <div>Contributors</div>
+                <a
+                    class="flex flex-col justify-center"
+                    href="https://github.com/seratne/salvations-edge-verity"
+                >
+                    <div
+                        class="flex flex-col items-center gap-2 justify-center"
+                    >
+                        <div>View Github Project</div>
+                        <img
+                            style="width: 3rem"
+                            src="/images/github.svg"
+                            alt="Github"
+                        />
+                    </div>
+                </a>
+                <div class="font-semibold">Contributors</div>
                 <div class="flex flex-row items-center gap-2">
                     seratne
                     <a href="https://www.reddit.com/u/seratne/"
