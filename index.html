@@ -86,8 +86,6 @@
       neededSymbols: function() {
         let retVal = {};
 
-        
-
         if(this.insideGuardianLeft) {
           retVal.left = [];
           if(this.outsideGuardianLeft) {
@@ -164,6 +162,109 @@
       },
       displayNeededSymbols: function(symbolText) {
         return symbolText.join(' <br/> ');
+      },
+      // This is garbage code but it works. Redo this to make it more elegant
+      displayNeededSteps: function(neededSymbols) {
+        if(neededSymbols.left && neededSymbols.middle && neededSymbols.right) {
+            totalShapes = neededSymbols.left.length + neededSymbols.right.length + neededSymbols.middle.length;
+            first_dissection = [];
+            second_dissection = [];
+            third_dissection = [];
+            steps = [];
+
+            // I hate that I'm doing this, there has to be a better way but I don't have the time right now.
+            if(totalShapes >= 2) {
+                first_step = '1. Place';
+                first_dissection = [];
+
+                if(neededSymbols.left.length > 0) {
+                    first_dissection.push(0);
+                }
+                if(neededSymbols.middle.length > 0) {
+                    first_dissection.push(1);
+                }
+                if(neededSymbols.right.length > 0 && first_dissection.length < 2) {
+                    first_dissection.push(2);
+                }
+                
+                for(let i = 0; i < first_dissection.length; i++) {
+                    target = '';
+                    switch(first_dissection[i]) {
+                        case 0:
+                            first_step = first_step.concat(' ', neededSymbols.left[0], ' on <b>left</b> and');
+                            break;
+                        case 1:
+                            first_step = first_step.concat(' ', neededSymbols.middle[0], ' on <b>middle</b> and');
+                            break;
+                        case 2:
+                            first_step = first_step.concat(' ', neededSymbols.right[0], ' on <b>right</b> and');
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                steps.push(first_step.substring(0, first_step.length - 4));
+            }
+            if(totalShapes >= 4) {
+                second_step = '2. Place';
+                second_dissection = [];
+
+                second_dissection.push(2);
+
+                if(neededSymbols.left.length > 1) {
+                    second_dissection.push(0);
+                }
+                if(neededSymbols.middle.length > 1 && second_dissection.length < 2) {
+                    second_dissection.push(1);
+                }
+                
+                for(let i = 0; i < second_dissection.length; i++) {
+                    target = '';
+                    switch(second_dissection[i]) {
+                        case 0:
+                            second_step = second_step.concat(' ', neededSymbols.left[1], ' on <b>left</b> and');
+                            break;
+                        case 1:
+                            second_step = second_step.concat(' ', neededSymbols.middle[1], ' on <b>middle</b> and');
+                            break;
+                        case 2:
+                            second_step = second_step.concat(' ', neededSymbols.right[0], ' on <b>right</b> and');
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                steps.push(second_step.substring(0, second_step.length - 4));
+            }
+            if(totalShapes >= 6) {
+                third_step = '3. Place';
+                third_dissection = [];
+
+                third_dissection.push(1);
+                third_dissection.push(2);
+                
+                for(let i = 0; i < third_dissection.length; i++) {
+                    target = '';
+                    switch(third_dissection[i]) {
+                        case 0:
+                            third_step = third_step.concat(' ', neededSymbols.left[1], ' on <b>left</b> and');
+                            break;
+                        case 1:
+                            third_step = third_step.concat(' ', neededSymbols.middle[1], ' on <b>middle</b> and');
+                            break;
+                        case 2:
+                            third_step = third_step.concat(' ', neededSymbols.right[1], ' on <b>right</b> and');
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                steps.push(third_step.substring(0, third_step.length - 4));
+            }
+
+            return steps.join('<br>');
+        }
+        return 'None';
       }
     }"
         x-init="() => {
@@ -444,7 +545,7 @@
                 <div
                     class="flex flex-col border-2 pt-2 pb-4 px-4 rounded-md w-full mt-4"
                 >
-                    <div class="font-bold text-lg">Dissections</div>
+                    <div class="font-bold text-lg">Final Shapes</div>
                     <div class="w-full flex flex-row">
                         <div class="flex flex-col w-1/3">
                             <span
@@ -452,20 +553,11 @@
                                 x-text="neededThreeD()[0]?.name"
                             >
                             </span>
-
-                            <span
-                                x-html="displayNeededSymbols(neededSymbols()?.left ?? [])"
-                                >-</span
-                            >
                         </div>
                         <div class="flex flex-col gap-2 w-1/3">
                             <span
                                 class="text-purple-800 font-bold"
                                 x-text="neededThreeD()[1]?.name"
-                            ></span>
-
-                            <span
-                                x-html="displayNeededSymbols(neededSymbols()?.middle ?? [])"
                             ></span>
                         </div>
                         <div class="flex flex-col gap-2 w-1/3">
@@ -473,11 +565,14 @@
                                 class="text-purple-800 font-bold"
                                 x-text="neededThreeD()[2]?.name"
                             ></span>
-                            <span
-                                x-html="displayNeededSymbols(neededSymbols()?.right ?? [])"
-                            ></span>
                         </div>
                     </div>
+                    <div class="font-bold text-lg">Steps</div>
+                    <dtv>
+                        <span
+                            x-html="displayNeededSteps(neededSymbols())"
+                        ></span>
+                    </dtv>
                 </div>
             </div>
 
