@@ -28,6 +28,12 @@
         {name: 'Square', image: './images/square.svg'},
         {name: 'Triangle', image: './images/triangle.svg'},
       ],
+      // map of inside shapes to the corresponding outside shape that guardian must be holding to exit inside rooms
+      solutions: {
+        Circle: 'Prism',
+        Square: 'Cone',
+        Triangle: 'Cylinder',
+      },
       threeD: [
         {name: 'Cube', symbol1: 'Square', symbol2: 'Square', isPure: true, image: './images/cube.svg'},
         {name: 'Sphere', symbol1: 'Circle', symbol2: 'Circle', isPure: true, image: './images/sphere.svg'},
@@ -75,9 +81,9 @@
         let retVal = [];
         if(this.insideGuardianLeft && this.insideGuardianMiddle && this.insideGuardianRight) {
           retVal = [
-            this.threeD.find(item => !item.isPure && item.symbol1 !== this.insideGuardianLeft && item.symbol2 !== this.insideGuardianLeft),
-            this.threeD.find(item => !item.isPure && item.symbol1 !== this.insideGuardianMiddle && item.symbol2 !== this.insideGuardianMiddle),
-            this.threeD.find(item => !item.isPure && item.symbol1 !== this.insideGuardianRight && item.symbol2 !== this.insideGuardianRight)
+            this.threeD.find(item => item.name === this.solutions[this.insideGuardianLeft]),
+            this.threeD.find(item => item.name === this.solutions[this.insideGuardianMiddle]),
+            this.threeD.find(item => item.name === this.solutions[this.insideGuardianRight]),
           ]
         }
         return retVal;
