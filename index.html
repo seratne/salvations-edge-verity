@@ -89,80 +89,42 @@
         return retVal;
       },
 
-      neededSymbols: function() {
+      neededSwaps: function() {
         let retVal = {};
 
+        guardianNeededSymbols = function(shapes, inside, outside) {
+          mustSend = [];
+          const outsideObject = shapes.find(item => item.name === outside);
+
+          if (outsideObject.symbol1 === inside) {
+            mustSend.push(outsideObject.symbol1);
+          }
+
+          if (outsideObject.symbol2 === inside) {
+            mustSend.push(outsideObject.symbol2);
+          }
+
+          if (mustSend.length === 0 && outsideObject.symbol1 === outsideObject.symbol2) {
+            mustSend.push(outsideObject.symbol1);
+          }
+
+          return mustSend;
+        };
+
         if(this.insideGuardianLeft) {
-          retVal.left = [];
           if(this.outsideGuardianLeft) {
-            const leftObject = this.threeD.find(item => item.name === this.outsideGuardianLeft);
-            if(leftObject.symbol1 === this.insideGuardianLeft) {
-              retVal.left.push(this.insideGuardianLeft);
-            }
-            if(leftObject.symbol2 === this.insideGuardianLeft) {
-              retVal.left.push(this.insideGuardianLeft);
-            }
-            if(retVal.left.length === 0 && leftObject.symbol1 === leftObject.symbol2) {
-                retVal.left.push(leftObject.symbol1);
-            }
+            retVal.left = guardianNeededSymbols(this.threeD, this.insideGuardianLeft, this.outsideGuardianLeft);
           }
         }
         if(this.insideGuardianMiddle) {
-          retVal.middle = [];
           if(this.outsideGuardianMiddle) {
-            const middleObject = this.threeD.find(item => item.name === this.outsideGuardianMiddle);
-            if(middleObject.symbol1 === this.insideGuardianMiddle) {
-              retVal.middle.push(this.insideGuardianMiddle);
-            }
-            if(middleObject.symbol2 === this.insideGuardianMiddle) {
-              retVal.middle.push(this.insideGuardianMiddle);
-            }
-            if(retVal.middle.length === 0 && middleObject.symbol1 === middleObject.symbol2) {
-                retVal.middle.push(middleObject.symbol1);
-            }
+            retVal.middle = guardianNeededSymbols(this.threeD, this.insideGuardianMiddle, this.outsideGuardianMiddle);
           }
         }
         if(this.insideGuardianRight) {
-          retVal.right = [];
           if(this.outsideGuardianRight) {
-            const rightObject = this.threeD.find(item => item.name === this.outsideGuardianRight);
-            if(rightObject.symbol1 === this.insideGuardianRight) {
-              retVal.right.push(this.insideGuardianRight);
-            }
-            if(rightObject.symbol2 === this.insideGuardianRight) {
-              retVal.right.push(this.insideGuardianRight);
-            }
-            if(retVal.right.length === 0 && rightObject.symbol1 === rightObject.symbol2) {
-                retVal.right.push(rightObject.symbol1);
-            }
+            retVal.right = guardianNeededSymbols(this.threeD, this.insideGuardianRight, this.outsideGuardianRight);
           }
-        }
-        if(this.insideGuardianLeft && this.insideGuardianMiddle && this.insideGuardianRight) {
-            if(this.outsideGuardianLeft && this.outsideGuardianMiddle && this.outsideGuardianRight) {
-                totalShapes = retVal.left.length + retVal.right.length + retVal.middle.length;
-                
-                if(totalShapes % 2 === 1) {
-                    originalLeft = this.threeD.find(item => item.name === this.outsideGuardianLeft);
-                    currentLeft1 = this.threeD.find(item => item.symbol1 === originalLeft.symbol1 && item.symbol2 === retVal.middle[0] && item.isPure);
-                    currentLeft2 = this.threeD.find(item => item.symbol2 === originalLeft.symbol2 && item.symbol1 === retVal.middle[0] && item.isPure);
-
-                    originalMiddle = this.threeD.find(item => item.name === this.outsideGuardianMiddle);
-                    currentMiddle1 = this.threeD.find(item => item.symbol1 === originalMiddle.symbol1 && item.symbol2 === retVal.left[0] && item.isPure);
-                    currentMiddle2 = this.threeD.find(item => item.symbol2 === originalMiddle.symbol2 && item.symbol1 === retVal.left[0] && item.isPure);
-
-                    if(currentLeft1) {
-                        retVal.left.push(currentLeft1.symbol1);
-                    } else if(currentLeft2) {
-                        retVal.left.push(currentLeft2.symbol1);
-                    }
-
-                    if(currentMiddle1) {
-                        retVal.middle.push(currentMiddle1.symbol1);
-                    } else if(currentMiddle2) {
-                        retVal.middle.push(currentMiddle2.symbol1);
-                    }
-                }
-            }
         }
         return retVal;
       },
@@ -170,105 +132,71 @@
         return symbolText.join(' <br/> ');
       },
       // This is garbage code but it works. Redo this to make it more elegant
-      displayNeededSteps: function(neededSymbols) {
-        if(neededSymbols.left && neededSymbols.middle && neededSymbols.right) {
-            totalShapes = neededSymbols.left.length + neededSymbols.right.length + neededSymbols.middle.length;
-            first_dissection = [];
-            second_dissection = [];
-            third_dissection = [];
+      displayNeededSteps: function(neededSwaps) {
+        if(neededSwaps.left && neededSwaps.middle && neededSwaps.right) {
             steps = [];
 
-            // I hate that I'm doing this, there has to be a better way but I don't have the time right now.
-            if(totalShapes >= 2) {
-                first_step = '1. Place';
-                first_dissection = [];
-
-                if(neededSymbols.left.length > 0) {
-                    first_dissection.push(0);
-                }
-                if(neededSymbols.middle.length > 0) {
-                    first_dissection.push(1);
-                }
-                if(neededSymbols.right.length > 0 && first_dissection.length < 2) {
-                    first_dissection.push(2);
-                }
-                
-                for(let i = 0; i < first_dissection.length; i++) {
-                    target = '';
-                    switch(first_dissection[i]) {
-                        case 0:
-                            first_step = first_step.concat(' ', neededSymbols.left[0], ' on <b>left</b> and');
-                            break;
-                        case 1:
-                            first_step = first_step.concat(' ', neededSymbols.middle[0], ' on <b>middle</b> and');
-                            break;
-                        case 2:
-                            first_step = first_step.concat(' ', neededSymbols.right[0], ' on <b>right</b> and');
-                            break;
-                        default:
-                            break;
+            while (neededSwaps.left.length > 0 || neededSwaps.middle.length > 0 || neededSwaps.right.length > 0) {
+                if (neededSwaps.left.length) {
+                    toSwap = neededSwaps.left.pop();
+                    // knowing a shape to get away from a guardian, if anyone needs two swaps, this definitely has to go there.
+                    // otherwise, if there are no aisles needing two swaps, either:
+                    // * we have the two swaps and can trade with anywhere
+                    // * there is only one other shape out of place, and we should swap with it
+                    if (neededSwaps.middle.length == 2) {
+                        toFind = neededSwaps.middle.pop();
+                        steps.push([toSwap, 'left', toFind, 'middle']);
+                    } else if (neededSwaps.right.length == 2) {
+                        toFind = neededSwaps.right.pop();
+                        steps.push([toSwap, 'left', toFind, 'right']);
+                    } else if (neededSwaps.middle.length == 1) {
+                        // it's possible that we're handling 'all outside aisles must swap one' e.g. SCT/Cylinder+Cone+Prism
+                        // we've popped left, pop middle and see if right needs one swap. if so, we'll actually need to swap the retrieved symbol again.
+                        toFind = neededSwaps.middle.pop();
+                        steps.push([toSwap, 'left', toFind, 'middle']);
+                        if (neededSwaps.left.length === 0 && neededSwaps.middle.length === 0 && neededSwaps.right.length == 1) {
+                            neededSwaps.left.push(toFind);
+                        }
+                    } else if (neededSwaps.right.length == 1) {
+                        toFind = neededSwaps.right.pop();
+                        steps.push([toSwap, 'left', toFind, 'right']);
+                    } else {
+                        console.log('wanted to swap ' + toSwap + ' from left, but couldnt ??');
+                        steps.push([undefined, undefined, undefined, undefined]);
+                        break;
                     }
-                }
-                steps.push(first_step.substring(0, first_step.length - 4));
-            }
-            if(totalShapes >= 4) {
-                second_step = '2. Place';
-                second_dissection = [];
-
-                second_dissection.push(2);
-
-                if(neededSymbols.left.length > 1) {
-                    second_dissection.push(0);
-                }
-                if(neededSymbols.middle.length > 1 && second_dissection.length < 2) {
-                    second_dissection.push(1);
-                }
-                
-                for(let i = 0; i < second_dissection.length; i++) {
-                    target = '';
-                    switch(second_dissection[i]) {
-                        case 0:
-                            second_step = second_step.concat(' ', neededSymbols.left[1], ' on <b>left</b> and');
-                            break;
-                        case 1:
-                            second_step = second_step.concat(' ', neededSymbols.middle[1], ' on <b>middle</b> and');
-                            break;
-                        case 2:
-                            second_step = second_step.concat(' ', neededSymbols.right[0], ' on <b>right</b> and');
-                            break;
-                        default:
-                            break;
+                } else if (neededSwaps.middle.length) {
+                    toSwap = neededSwaps.middle.pop();
+                    if (neededSwaps.right.length) {
+                        toFind = neededSwaps.right.pop();
+                        steps.push([toSwap, 'middle', toFind, 'right']);
+                    } else {
+                        console.log('wanted to swap ' + toSwap + ' from middle, couldnt put it at right?? left should have taken this otherwise??');
+                        steps.push([undefined, undefined, undefined, undefined]);
+                        break;
                     }
+                } else {
+                    // left needs zero or two swaps,
+                    // middle needs zero or two swaps,
+                    // but if any aisle needs two swaps both others need at least one to match
+                    // so if we are here then either we are done (should have exited the loop) or all aisles need two swaps.
+                    // break the tie, at which point the loop can converge.
+                    toSwap = neededSwaps.middle.pop();
+                    toFind = neededSwaps.right.pop();
+                    steps.push([toSwap, 'middle', toFind, 'right']);
                 }
-                steps.push(second_step.substring(0, second_step.length - 4));
-            }
-            if(totalShapes >= 6) {
-                third_step = '3. Place';
-                third_dissection = [];
-
-                third_dissection.push(1);
-                third_dissection.push(2);
-                
-                for(let i = 0; i < third_dissection.length; i++) {
-                    target = '';
-                    switch(third_dissection[i]) {
-                        case 0:
-                            third_step = third_step.concat(' ', neededSymbols.left[1], ' on <b>left</b> and');
-                            break;
-                        case 1:
-                            third_step = third_step.concat(' ', neededSymbols.middle[1], ' on <b>middle</b> and');
-                            break;
-                        case 2:
-                            third_step = third_step.concat(' ', neededSymbols.right[1], ' on <b>right</b> and');
-                            break;
-                        default:
-                            break;
-                    }
-                }
-                steps.push(third_step.substring(0, third_step.length - 4));
             }
 
-            return steps.join('<br>');
+            step_strings = [];
+
+            for (i = 0; i < steps.length; i++) {
+                if (steps[i].indexOf(undefined) >= 0) {
+                    return 'Unable to solve: inside or outside calls might be wrong';
+                }
+                step_strings.push(''.concat(i + 1, '. Place ', steps[i][0], ' on <b>', steps[i][1], '</b> and ', steps[i][2], ' on <b>', steps[i][3], '</b>'));
+            }
+
+            return step_strings.join('<br>');
         }
         return 'None';
       }
@@ -576,7 +504,7 @@
                     <div class="font-bold text-lg">Steps</div>
                     <dtv>
                         <span
-                            x-html="displayNeededSteps(neededSymbols())"
+                            x-html="displayNeededSteps(neededSwaps())"
                         ></span>
                     </dtv>
                 </div>
