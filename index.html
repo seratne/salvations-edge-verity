@@ -24,17 +24,23 @@
         },
       twoD: ['Circle', 'Square', 'Triangle'],
       twoDWithImages: [
-        {name: 'Circle', image: '/images/circle.svg'},
-        {name: 'Square', image: '/images/square.svg'},
-        {name: 'Triangle', image: '/images/triangle.svg'},
+        {name: 'Circle', image: './images/circle.svg'},
+        {name: 'Square', image: './images/square.svg'},
+        {name: 'Triangle', image: './images/triangle.svg'},
       ],
+      // map of inside shapes to the corresponding outside shape that guardian must be holding to exit inside rooms
+      solutions: {
+        Circle: 'Prism',
+        Square: 'Cone',
+        Triangle: 'Cylinder',
+      },
       threeD: [
-        {name: 'Cube', symbol1: 'Square', symbol2: 'Square', isPure: true, image: '/images/cube.svg'},
-        {name: 'Sphere', symbol1: 'Circle', symbol2: 'Circle', isPure: true, image: '/images/sphere.svg'},
-        {name: 'Pyramid', symbol1: 'Triangle', symbol2: 'Triangle', isPure: true, image: '/images/pyramid.svg'},
-        {name: 'Cylinder', symbol1: 'Circle', symbol2: 'Square', isPure: false, image: '/images/cylinder.svg'},
-        {name: 'Cone', symbol1: 'Circle', symbol2: 'Triangle', isPure: false, image: '/images/cone.svg'},
-        {name: 'Prism', symbol1: 'Triangle', symbol2: 'Square', isPure: false, image: '/images/prism.svg'},
+        {name: 'Cube', symbol1: 'Square', symbol2: 'Square', isPure: true, image: './images/cube.svg'},
+        {name: 'Sphere', symbol1: 'Circle', symbol2: 'Circle', isPure: true, image: './images/sphere.svg'},
+        {name: 'Pyramid', symbol1: 'Triangle', symbol2: 'Triangle', isPure: true, image: './images/pyramid.svg'},
+        {name: 'Cylinder', symbol1: 'Circle', symbol2: 'Square', isPure: false, image: './images/cylinder.svg'},
+        {name: 'Cone', symbol1: 'Circle', symbol2: 'Triangle', isPure: false, image: './images/cone.svg'},
+        {name: 'Prism', symbol1: 'Triangle', symbol2: 'Square', isPure: false, image: './images/prism.svg'},
       ],
       insideCallouts: '',
       insideGuardianLeft: '',
@@ -75,95 +81,124 @@
         let retVal = [];
         if(this.insideGuardianLeft && this.insideGuardianMiddle && this.insideGuardianRight) {
           retVal = [
-            this.threeD.find(item => !item.isPure && item.symbol1 !== this.insideGuardianLeft && item.symbol2 !== this.insideGuardianLeft),
-            this.threeD.find(item => !item.isPure && item.symbol1 !== this.insideGuardianMiddle && item.symbol2 !== this.insideGuardianMiddle),
-            this.threeD.find(item => !item.isPure && item.symbol1 !== this.insideGuardianRight && item.symbol2 !== this.insideGuardianRight)
+            this.threeD.find(item => item.name === this.solutions[this.insideGuardianLeft]),
+            this.threeD.find(item => item.name === this.solutions[this.insideGuardianMiddle]),
+            this.threeD.find(item => item.name === this.solutions[this.insideGuardianRight]),
           ]
         }
         return retVal;
       },
 
-      neededSymbols: function() {
+      neededSwaps: function() {
         let retVal = {};
 
-        
+        guardianNeededSymbols = function(shapes, inside, outside) {
+          mustSend = [];
+          const outsideObject = shapes.find(item => item.name === outside);
+
+          if (outsideObject.symbol1 === inside) {
+            mustSend.push(outsideObject.symbol1);
+          }
+
+          if (outsideObject.symbol2 === inside) {
+            mustSend.push(outsideObject.symbol2);
+          }
+
+          if (mustSend.length === 0 && outsideObject.symbol1 === outsideObject.symbol2) {
+            mustSend.push(outsideObject.symbol1);
+          }
+
+          return mustSend;
+        };
 
         if(this.insideGuardianLeft) {
-          retVal.left = [];
           if(this.outsideGuardianLeft) {
-            const leftObject = this.threeD.find(item => item.name === this.outsideGuardianLeft);
-            if(leftObject.symbol1 === this.insideGuardianLeft) {
-              retVal.left.push(this.insideGuardianLeft);
-            }
-            if(leftObject.symbol2 === this.insideGuardianLeft) {
-              retVal.left.push(this.insideGuardianLeft);
-            }
-            if(retVal.left.length === 0 && leftObject.symbol1 === leftObject.symbol2) {
-                retVal.left.push(leftObject.symbol1);
-            }
+            retVal.left = guardianNeededSymbols(this.threeD, this.insideGuardianLeft, this.outsideGuardianLeft);
           }
         }
         if(this.insideGuardianMiddle) {
-          retVal.middle = [];
           if(this.outsideGuardianMiddle) {
-            const middleObject = this.threeD.find(item => item.name === this.outsideGuardianMiddle);
-            if(middleObject.symbol1 === this.insideGuardianMiddle) {
-              retVal.middle.push(this.insideGuardianMiddle);
-            }
-            if(middleObject.symbol2 === this.insideGuardianMiddle) {
-              retVal.middle.push(this.insideGuardianMiddle);
-            }
-            if(retVal.middle.length === 0 && middleObject.symbol1 === middleObject.symbol2) {
-                retVal.middle.push(middleObject.symbol1);
-            }
+            retVal.middle = guardianNeededSymbols(this.threeD, this.insideGuardianMiddle, this.outsideGuardianMiddle);
           }
         }
         if(this.insideGuardianRight) {
-          retVal.right = [];
           if(this.outsideGuardianRight) {
-            const rightObject = this.threeD.find(item => item.name === this.outsideGuardianRight);
-            if(rightObject.symbol1 === this.insideGuardianRight) {
-              retVal.right.push(this.insideGuardianRight);
-            }
-            if(rightObject.symbol2 === this.insideGuardianRight) {
-              retVal.right.push(this.insideGuardianRight);
-            }
-            if(retVal.right.length === 0 && rightObject.symbol1 === rightObject.symbol2) {
-                retVal.right.push(rightObject.symbol1);
-            }
+            retVal.right = guardianNeededSymbols(this.threeD, this.insideGuardianRight, this.outsideGuardianRight);
           }
-        }
-        if(this.insideGuardianLeft && this.insideGuardianMiddle && this.insideGuardianRight) {
-            if(this.outsideGuardianLeft && this.outsideGuardianMiddle && this.outsideGuardianRight) {
-                totalShapes = retVal.left.length + retVal.right.length + retVal.middle.length;
-                
-                if(totalShapes % 2 === 1) {
-                    originalLeft = this.threeD.find(item => item.name === this.outsideGuardianLeft);
-                    currentLeft1 = this.threeD.find(item => item.symbol1 === originalLeft.symbol1 && item.symbol2 === retVal.middle[0] && item.isPure);
-                    currentLeft2 = this.threeD.find(item => item.symbol2 === originalLeft.symbol2 && item.symbol1 === retVal.middle[0] && item.isPure);
-
-                    originalMiddle = this.threeD.find(item => item.name === this.outsideGuardianMiddle);
-                    currentMiddle1 = this.threeD.find(item => item.symbol1 === originalMiddle.symbol1 && item.symbol2 === retVal.left[0] && item.isPure);
-                    currentMiddle2 = this.threeD.find(item => item.symbol2 === originalMiddle.symbol2 && item.symbol1 === retVal.left[0] && item.isPure);
-
-                    if(currentLeft1) {
-                        retVal.left.push(currentLeft1.symbol1);
-                    } else if(currentLeft2) {
-                        retVal.left.push(currentLeft2.symbol1);
-                    }
-
-                    if(currentMiddle1) {
-                        retVal.middle.push(currentMiddle1.symbol1);
-                    } else if(currentMiddle2) {
-                        retVal.middle.push(currentMiddle2.symbol1);
-                    }
-                }
-            }
         }
         return retVal;
       },
       displayNeededSymbols: function(symbolText) {
         return symbolText.join(' <br/> ');
+      },
+      // This is garbage code but it works. Redo this to make it more elegant
+      displayNeededSteps: function(neededSwaps) {
+        if(neededSwaps.left && neededSwaps.middle && neededSwaps.right) {
+            steps = [];
+
+            while (neededSwaps.left.length > 0 || neededSwaps.middle.length > 0 || neededSwaps.right.length > 0) {
+                if (neededSwaps.left.length) {
+                    toSwap = neededSwaps.left.pop();
+                    // knowing a shape to get away from a guardian, if anyone needs two swaps, this definitely has to go there.
+                    // otherwise, if there are no aisles needing two swaps, either:
+                    // * we have the two swaps and can trade with anywhere
+                    // * there is only one other shape out of place, and we should swap with it
+                    if (neededSwaps.middle.length == 2) {
+                        toFind = neededSwaps.middle.pop();
+                        steps.push([toSwap, 'left', toFind, 'middle']);
+                    } else if (neededSwaps.right.length == 2) {
+                        toFind = neededSwaps.right.pop();
+                        steps.push([toSwap, 'left', toFind, 'right']);
+                    } else if (neededSwaps.middle.length == 1) {
+                        // it's possible that we're handling 'all outside aisles must swap one' e.g. SCT/Cylinder+Cone+Prism
+                        // we've popped left, pop middle and see if right needs one swap. if so, we'll actually need to swap the retrieved symbol again.
+                        toFind = neededSwaps.middle.pop();
+                        steps.push([toSwap, 'left', toFind, 'middle']);
+                        if (neededSwaps.left.length === 0 && neededSwaps.middle.length === 0 && neededSwaps.right.length == 1) {
+                            neededSwaps.left.push(toFind);
+                        }
+                    } else if (neededSwaps.right.length == 1) {
+                        toFind = neededSwaps.right.pop();
+                        steps.push([toSwap, 'left', toFind, 'right']);
+                    } else {
+                        console.log('wanted to swap ' + toSwap + ' from left, but couldnt ??');
+                        steps.push([undefined, undefined, undefined, undefined]);
+                        break;
+                    }
+                } else if (neededSwaps.middle.length) {
+                    toSwap = neededSwaps.middle.pop();
+                    if (neededSwaps.right.length) {
+                        toFind = neededSwaps.right.pop();
+                        steps.push([toSwap, 'middle', toFind, 'right']);
+                    } else {
+                        console.log('wanted to swap ' + toSwap + ' from middle, couldnt put it at right?? left should have taken this otherwise??');
+                        steps.push([undefined, undefined, undefined, undefined]);
+                        break;
+                    }
+                } else {
+                    // left needs zero or two swaps,
+                    // middle needs zero or two swaps,
+                    // but if any aisle needs two swaps both others need at least one to match
+                    // so if we are here then either we are done (should have exited the loop) or all aisles need two swaps.
+                    // break the tie, at which point the loop can converge.
+                    toSwap = neededSwaps.middle.pop();
+                    toFind = neededSwaps.right.pop();
+                    steps.push([toSwap, 'middle', toFind, 'right']);
+                }
+            }
+
+            step_strings = [];
+
+            for (i = 0; i < steps.length; i++) {
+                if (steps[i].indexOf(undefined) >= 0) {
+                    return 'Unable to solve: inside or outside calls might be wrong';
+                }
+                step_strings.push(''.concat(i + 1, '. Place ', steps[i][0], ' on <b>', steps[i][1], '</b> and ', steps[i][2], ' on <b>', steps[i][3], '</b>'));
+            }
+
+            return step_strings.join('<br>');
+        }
+        return 'None';
       }
     }"
         x-init="() => {
@@ -444,7 +479,7 @@
                 <div
                     class="flex flex-col border-2 pt-2 pb-4 px-4 rounded-md w-full mt-4"
                 >
-                    <div class="font-bold text-lg">Dissections</div>
+                    <div class="font-bold text-lg">Final Shapes</div>
                     <div class="w-full flex flex-row">
                         <div class="flex flex-col w-1/3">
                             <span
@@ -452,20 +487,11 @@
                                 x-text="neededThreeD()[0]?.name"
                             >
                             </span>
-
-                            <span
-                                x-html="displayNeededSymbols(neededSymbols()?.left ?? [])"
-                                >-</span
-                            >
                         </div>
                         <div class="flex flex-col gap-2 w-1/3">
                             <span
                                 class="text-purple-800 font-bold"
                                 x-text="neededThreeD()[1]?.name"
-                            ></span>
-
-                            <span
-                                x-html="displayNeededSymbols(neededSymbols()?.middle ?? [])"
                             ></span>
                         </div>
                         <div class="flex flex-col gap-2 w-1/3">
@@ -473,11 +499,14 @@
                                 class="text-purple-800 font-bold"
                                 x-text="neededThreeD()[2]?.name"
                             ></span>
-                            <span
-                                x-html="displayNeededSymbols(neededSymbols()?.right ?? [])"
-                            ></span>
                         </div>
                     </div>
+                    <div class="font-bold text-lg">Steps</div>
+                    <dtv>
+                        <span
+                            x-html="displayNeededSteps(neededSwaps())"
+                        ></span>
+                    </dtv>
                 </div>
             </div>
 
@@ -494,7 +523,7 @@
                         <div>View Github Project</div>
                         <img
                             style="width: 3rem"
-                            src="/images/github.svg"
+                            src="./images/github.svg"
                             alt="Github"
                         />
                     </div>
