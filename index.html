@@ -197,11 +197,49 @@
         }
         return retVal;
       },
+	  wishlist: function() {
+	    let retVal = {};
+		
+		guardianWishlistSymbols = function(shapes, solutions, inside, outside) {
+          mustReceive = [];
+		  const solutionObject = shapes.find(item => item.name === solutions[inside]);
+          const outsideObject = shapes.find(item => item.name === outside);
+
+          if (solutionObject.symbol1 != outsideObject.symbol1 && solutionObject.symbol1 != outsideObject.symbol2) {
+            mustReceive.push(solutionObject.symbol1);
+          }
+
+          if (solutionObject.symbol2 != outsideObject.symbol1 && solutionObject.symbol2 != outsideObject.symbol2) {
+            mustReceive.push(solutionObject.symbol2);
+          }
+
+          return mustReceive;
+        };
+		
+		if(this.insideGuardianLeft) {
+          if(this.outsideGuardianLeft) {
+            retVal.left = guardianWishlistSymbols(this.threeD, this.solutions, this.insideGuardianLeft, this.outsideGuardianLeft);
+          }
+        }
+		
+        if(this.insideGuardianMiddle) {
+          if(this.outsideGuardianMiddle) {
+            retVal.middle = guardianWishlistSymbols(this.threeD, this.solutions, this.insideGuardianMiddle, this.outsideGuardianMiddle);
+          }
+        }
+		
+        if(this.insideGuardianRight) {
+          if(this.outsideGuardianRight) {
+            retVal.right = guardianWishlistSymbols(this.threeD, this.solutions, this.insideGuardianRight, this.outsideGuardianRight);
+          }
+        }
+        return retVal;
+	  },
       displayNeededSymbols: function(symbolText) {
         return symbolText.join(' <br/> ');
       },
       // This is garbage code but it works. Redo this to make it more elegant
-      displayNeededSteps: function(neededSwaps) {
+      displayNeededSteps: function(neededSwaps, wishlist) {
         if(neededSwaps.left && neededSwaps.middle && neededSwaps.right) {
             steps = [];
 
@@ -212,23 +250,48 @@
                     // otherwise, if there are no aisles needing two swaps, either:
                     // * we have the two swaps and can trade with anywhere
                     // * there is only one other shape out of place, and we should swap with it
-                    if (neededSwaps.middle.length == 2) {
+                    if (neededSwaps.middle.length == 2 && wishlist.middle.indexOf(toSwap) > -1) {
                         toFind = neededSwaps.middle.pop();
                         steps.push([toSwap, 'left', toFind, 'middle']);
-                    } else if (neededSwaps.right.length == 2) {
+						wishlist.middle.splice(wishlist.middle.indexOf(toSwap),1);
+						if(wishlist.left.indexOf(toFind) > -1){
+						  wishlist.left.splice(wishlist.left.indexOf(toFind),1);
+						}
+						else {
+						  neededSwaps.left.push(toFind);
+						}
+                    } else if (neededSwaps.right.length == 2 && wishlist.right.indexOf(toSwap) > -1) {
                         toFind = neededSwaps.right.pop();
                         steps.push([toSwap, 'left', toFind, 'right']);
-                    } else if (neededSwaps.middle.length == 1) {
+						wishlist.right.splice(wishlist.right.indexOf(toSwap),1);
+						if(wishlist.left.indexOf(toFind) > -1){
+						  wishlist.left.splice(wishlist.left.indexOf(toFind),1);
+						}
+						else {
+						  neededSwaps.left.push(toFind);
+						}
+                    } else if (neededSwaps.middle.length == 1 && wishlist.middle.indexOf(toSwap) > -1) {
                         // it's possible that we're handling 'all outside aisles must swap one' e.g. SCT/Cylinder+Cone+Prism
                         // we've popped left, pop middle and see if right needs one swap. if so, we'll actually need to swap the retrieved symbol again.
                         toFind = neededSwaps.middle.pop();
                         steps.push([toSwap, 'left', toFind, 'middle']);
-                        if (neededSwaps.left.length === 0 && neededSwaps.middle.length === 0 && neededSwaps.right.length == 1) {
-                            neededSwaps.left.push(toFind);
-                        }
-                    } else if (neededSwaps.right.length == 1) {
+						wishlist.middle.splice(wishlist.middle.indexOf(toSwap),1);
+						if(wishlist.left.indexOf(toFind) > -1){
+						  wishlist.left.splice(wishlist.left.indexOf(toFind),1);
+						}
+						else {
+						  neededSwaps.left.push(toFind);
+						}
+                    } else if (neededSwaps.right.length == 1 && wishlist.right.indexOf(toSwap) > -1) {
                         toFind = neededSwaps.right.pop();
                         steps.push([toSwap, 'left', toFind, 'right']);
+						wishlist.right.splice(wishlist.right.indexOf(toSwap),1);
+						if(wishlist.left.indexOf(toFind) > -1){
+						  wishlist.left.splice(wishlist.left.indexOf(toFind),1);
+						}
+						else {
+						  neededSwaps.left.push(toFind);
+						}
                     } else {
                         console.log('wanted to swap ' + toSwap + ' from left, but couldnt ??');
                         steps.push([undefined, undefined, undefined, undefined]);
@@ -609,7 +672,7 @@
                     </div>
                     <div class="font-bold text-lg">Steps</div>
                     <dtv>
-                        <span x-html="displayNeededSteps(neededSwaps())"></span>
+                        <span x-html="displayNeededSteps(neededSwaps(),wishlist())"></span>
                     </dtv>
                 </div>
             </div>
