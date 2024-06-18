@@ -11,6 +11,50 @@
             [x-cloak] {
                 display: none !important;
             }
+            /* dark mode */
+            @media (prefers-color-scheme: dark) {
+                body {
+                    background-color: #2e323a;
+                    color: #e2e8f0;
+                }
+                .bg-gray-100 {
+                    background-color: #2d3748;
+                }
+                .border-gray-300 {
+                    border-color: #4a5568;
+                }
+                .border-blue-800 {
+                    border-color: #2b6cb0;
+                }
+                .bg-gray-300 {
+                    background-color: #4a5568;
+                }
+                .text-purple-800 {
+                    color: #6b46c1;
+                }
+                select,
+                input {
+                    background-color: #383f4d;
+                    border-color: #424c5a !important;
+                }
+                .border-dark {
+                    border-color: #424c5a !important;
+                }
+                .img-bg {
+                    background-color: #383f4d !important;
+                }
+                svg #circle,
+                svg #square,
+                svg #triangle,
+                svg #cube,
+                svg #sphere,
+                svg #pyramid,
+                svg #cylinder,
+                svg #cone,
+                svg #prism {
+                    fill: white !important; /* Change this to your desired color */
+                }
+            }
         </style>
     </head>
     <body
@@ -24,9 +68,9 @@
         },
       twoD: ['Circle', 'Square', 'Triangle'],
       twoDWithImages: [
-        {name: 'Circle', image: './images/circle.svg'},
-        {name: 'Square', image: './images/square.svg'},
-        {name: 'Triangle', image: './images/triangle.svg'},
+        {name: 'Circle', image: './images/circle.svg', raw: ''},
+        {name: 'Square', image: './images/square.svg', raw: ''},
+        {name: 'Triangle', image: './images/triangle.svg', raw: ''},
       ],
       // map of inside shapes to the corresponding outside shape that guardian must be holding to exit inside rooms
       solutions: {
@@ -35,12 +79,12 @@
         Triangle: 'Cylinder',
       },
       threeD: [
-        {name: 'Cube', symbol1: 'Square', symbol2: 'Square', isPure: true, image: './images/cube.svg'},
-        {name: 'Sphere', symbol1: 'Circle', symbol2: 'Circle', isPure: true, image: './images/sphere.svg'},
-        {name: 'Pyramid', symbol1: 'Triangle', symbol2: 'Triangle', isPure: true, image: './images/pyramid.svg'},
-        {name: 'Cylinder', symbol1: 'Circle', symbol2: 'Square', isPure: false, image: './images/cylinder.svg'},
-        {name: 'Cone', symbol1: 'Circle', symbol2: 'Triangle', isPure: false, image: './images/cone.svg'},
-        {name: 'Prism', symbol1: 'Triangle', symbol2: 'Square', isPure: false, image: './images/prism.svg'},
+        {name: 'Cube', symbol1: 'Square', symbol2: 'Square', isPure: true, image: './images/cube.svg', raw: ''},
+        {name: 'Sphere', symbol1: 'Circle', symbol2: 'Circle', isPure: true, image: './images/sphere.svg', raw: ''},
+        {name: 'Pyramid', symbol1: 'Triangle', symbol2: 'Triangle', isPure: true, image: './images/pyramid.svg', raw: ''},
+        {name: 'Cylinder', symbol1: 'Circle', symbol2: 'Square', isPure: false, image: './images/cylinder.svg', raw: ''},
+        {name: 'Cone', symbol1: 'Circle', symbol2: 'Triangle', isPure: false, image: './images/cone.svg', raw: ''},
+        {name: 'Prism', symbol1: 'Triangle', symbol2: 'Square', isPure: false, image: './images/prism.svg', raw: ''},
       ],
       insideCallouts: '',
       insideGuardianLeft: '',
@@ -75,6 +119,31 @@
         if(this.insideGuardianLeft && this.insideGuardianMiddle && this.insideGuardianRight) {
           this.insideCallouts = this.insideGuardianLeft[0].toUpperCase() + this.insideGuardianMiddle[0].toUpperCase() + this.insideGuardianRight[0].toUpperCase();
         }
+      },
+
+      clickInsidePicture(guardian, imageUrlName){
+            if(guardian === 'left'){
+                this.insideGuardianLeft = imageUrlName;
+                
+            } 
+            if(guardian === 'middle'){
+                this.insideGuardianMiddle = imageUrlName;
+            } 
+            if(guardian === 'right'){
+                this.insideGuardianRight = imageUrlName;
+            }
+            //if two are selected, auto select third
+            if(this.insideGuardianLeft && this.insideGuardianMiddle && !this.insideGuardianRight){
+                this.insideGuardianRight = this.twoD.find(item => item !== this.insideGuardianLeft && item !== this.insideGuardianMiddle);
+            }
+            if(this.insideGuardianLeft && !this.insideGuardianMiddle && this.insideGuardianRight){
+                this.insideGuardianMiddle = this.twoD.find(item => item !== this.insideGuardianLeft && item !== this.insideGuardianRight);
+            }
+            if(!this.insideGuardianLeft && this.insideGuardianMiddle && this.insideGuardianRight){
+                this.insideGuardianLeft = this.twoD.find(item => item !== this.insideGuardianMiddle && item !== this.insideGuardianRight);
+            }
+            //if all are selected, reset matching
+            
       },
 
       neededThreeD: function() {
@@ -215,10 +284,44 @@
                 }
             });
 
+            twoDWithImages.forEach((item) => {
+                fetch(item.image)
+                    .then((response) => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+                        return response.text();
+                    })
+                    .then((data) => {
+                        item.raw = data;
+                    })
+                    .catch((error) => {
+                        console.log('There was a problem with the fetch operation: ' + error.message);
+                    });
+            });
+
+            threeD.forEach((item) => {
+                fetch(item.image)
+                    .then((response) => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+                        return response.text();
+                    })
+                    .then((data) => {
+                        item.raw = data;
+                    })
+                    .catch((error) => {
+                        console.log('There was a problem with the fetch operation: ' + error.message);
+                    });
+            });
+
         }"
+        class="h-screen w-screen flex flex-col items-center justify-center"
     >
         <div class="w-full flex flex-col items-center pt-8">
             <div class="flex flex-col max-w-[600px]">
+                <div class="w-full flex flex-row justify-between"></div>
                 <div class="input-group flex flex-col">
                     <label class="whitespace-nowrap font-bold" for="nameField"
                         >Inside Callouts</label
@@ -241,15 +344,14 @@
                             <div class="flex flex-row flex-wrap gap-2">
                                 <template x-for="imageUrl in twoDWithImages">
                                     <div
-                                        class="h-12 w-12 cursor-pointer"
-                                        x-bind:class="insideGuardianLeft === imageUrl.name ? 'border-2 border-blue-800 p-1 bg-gray-300' : 'border-2 border-gray-300 p-1'"
-                                        x-on:click="insideGuardianLeft = imageUrl.name"
+                                        class="h-12 w-12 p-2 cursor-pointer img-bg items-center justify-center"
+                                        x-bind:class="insideGuardianLeft === imageUrl.name ? 'border-2 border-blue-800 p-1 bg-gray-300' : 'border-2 border-gray-300 p-1 border-dark'"
+                                        x-on:click="clickInsidePicture('left', imageUrl.name)"
                                     >
-                                        <img
-                                            class="w-10 h-10"
-                                            x-bind:src="imageUrl.image"
-                                            x-bind:alt="imageUrl.name"
-                                        />
+                                        <div
+                                            class="w-full h-full"
+                                            x-html="imageUrl.raw"
+                                        ></div>
                                     </div>
                                 </template>
                             </div>
@@ -280,13 +382,13 @@
                             <div class="flex flex-row flex-wrap gap-2">
                                 <template x-for="imageUrl in twoDWithImages">
                                     <div
-                                        class="h-12 w-12 cursor-pointer"
-                                        x-bind:class="insideGuardianMiddle === imageUrl.name ? 'border-2 border-blue-800 p-1 bg-gray-300' : 'border-2 border-gray-300 p-1'"
-                                        x-on:click="insideGuardianMiddle = imageUrl.name"
+                                        class="h-12 w-12 p-2 cursor-pointer img-bg items-center justify-center"
+                                        x-bind:class="insideGuardianMiddle === imageUrl.name ? 'border-2 border-blue-800 p-1 bg-gray-300' : 'border-2 border-gray-300 p-1 border-dark'"
+                                        x-on:click="clickInsidePicture('middle', imageUrl.name)"
                                     >
-                                        <img
-                                            class="w-10 h-10"
-                                            x-bind:src="imageUrl.image"
+                                        <div
+                                            x-html="imageUrl.raw"
+                                            class="w-full h-full"
                                             x-bind:alt="imageUrl.name"
                                         />
                                     </div>
@@ -318,12 +420,13 @@
                             <div class="flex flex-row flex-wrap gap-2">
                                 <template x-for="imageUrl in twoDWithImages">
                                     <div
-                                        class="h-12 w-12 cursor-pointer"
-                                        x-bind:class="insideGuardianRight === imageUrl.name ? 'border-2 border-blue-800 p-1 bg-gray-300' : 'border-2 border-gray-300 p-1'"
-                                        x-on:click="insideGuardianRight = imageUrl.name"
+                                        class="h-12 w-12 p-2 cursor-pointer img-bg items-center justify-center"
+                                        x-bind:class="insideGuardianRight === imageUrl.name ? 'border-2 border-blue-800 p-1 bg-gray-300' : 'border-2 border-gray-300 p-1 border-dark'"
+                                        x-on:click="clickInsidePicture('right', imageUrl.name)"
                                     >
-                                        <img
-                                            class="w-10 h-10"
+                                        <div
+                                            x-html="imageUrl.raw"
+                                            class="w-full h-full"
                                             x-bind:src="imageUrl.image"
                                             x-bind:alt="imageUrl.name"
                                         />
@@ -363,12 +466,13 @@
                             <div class="flex flex-row flex-wrap gap-2">
                                 <template x-for="imageUrl in threeD">
                                     <div
-                                        class="h-12 w-12 cursor-pointer"
-                                        x-bind:class="outsideGuardianLeft === imageUrl.name ? 'border-2 border-blue-800 bg-gray-300 p-1' : 'border-2 border-gray-300 p-1'"
+                                        class="h-12 w-12 p-2 cursor-pointer img-bg items-center justify-center"
+                                        x-bind:class="outsideGuardianLeft === imageUrl.name ? 'border-2 border-blue-800 bg-gray-300 p-1' : 'border-2 border-gray-300 p-1 border-dark'"
                                         x-on:click="outsideGuardianLeft = imageUrl.name"
                                     >
-                                        <img
-                                            class="w-10 h-10"
+                                        <div
+                                            x-html="imageUrl.raw"
+                                            class="w-full h-full"
                                             x-bind:src="imageUrl.image"
                                             x-bind:alt="imageUrl.name"
                                         />
@@ -403,12 +507,13 @@
                             <div class="flex flex-row flex-wrap gap-2">
                                 <template x-for="imageUrl in threeD">
                                     <div
-                                        class="h-12 w-12 cursor-pointer"
-                                        x-bind:class="outsideGuardianMiddle === imageUrl.name ? 'border-2 border-blue-800 bg-gray-300 p-1' : 'border-2 border-gray-300 p-1'"
+                                        class="h-12 w-12 p-2 cursor-pointer img-bg items-center justify-center"
+                                        x-bind:class="outsideGuardianMiddle === imageUrl.name ? 'border-2 border-blue-800 bg-gray-300 p-1' : 'border-2 border-gray-300 p-1 border-dark'"
                                         x-on:click="outsideGuardianMiddle = imageUrl.name"
                                     >
-                                        <img
-                                            class="w-10 h-10"
+                                        <div
+                                            x-html="imageUrl.raw"
+                                            class="w-full h-full"
                                             x-bind:src="imageUrl.image"
                                             x-bind:alt="imageUrl.name"
                                         />
@@ -443,12 +548,13 @@
                             <div class="flex flex-row flex-wrap gap-2">
                                 <template x-for="imageUrl in threeD">
                                     <div
-                                        class="h-12 w-12 cursor-pointer"
-                                        x-bind:class="outsideGuardianRight === imageUrl.name ? 'border-2 border-blue-800 bg-gray-300 p-1' : 'border-2 border-gray-300 p-1'"
+                                        class="h-12 w-12 p-2 cursor-pointer img-bg items-center justify-center"
+                                        x-bind:class="outsideGuardianRight === imageUrl.name ? 'border-2 border-blue-800 bg-gray-300 p-1' : 'border-2 border-gray-300 p-1 border-dark'"
                                         x-on:click="outsideGuardianRight = imageUrl.name"
                                     >
-                                        <img
-                                            class="w-10 h-10"
+                                        <div
+                                            x-html="imageUrl.raw"
+                                            class="w-full h-full"
                                             x-bind:src="imageUrl.image"
                                             x-bind:alt="imageUrl.name"
                                         />
@@ -503,9 +609,7 @@
                     </div>
                     <div class="font-bold text-lg">Steps</div>
                     <dtv>
-                        <span
-                            x-html="displayNeededSteps(neededSwaps())"
-                        ></span>
+                        <span x-html="displayNeededSteps(neededSwaps())"></span>
                     </dtv>
                 </div>
             </div>
