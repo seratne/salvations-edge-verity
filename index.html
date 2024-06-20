@@ -86,6 +86,134 @@
         {name: 'Cone', symbol1: 'Circle', symbol2: 'Triangle', isPure: false, image: './images/cone.svg', raw: ''},
         {name: 'Prism', symbol1: 'Triangle', symbol2: 'Square', isPure: false, image: './images/prism.svg', raw: ''},
       ],
+	  solutionsMatrix: {
+        CircleSquareTrianglePyramidSphereCube:  [['Triangle', 'left', 'Square', 'right'], ['Circle', 'middle', 'Triangle', 'right']] ,
+        CircleSquareTrianglePyramidCubeSphere:  [['Triangle', 'left', 'Square', 'middle'], ['Square', 'middle', 'Circle', 'right']] ,
+        CircleSquareTrianglePyramidCylinderCylinder:  [['Triangle', 'left', 'Square', 'middle']] ,
+        CircleSquareTriangleSpherePyramidCube:  [['Triangle', 'middle', 'Circle', 'left'], ['Circle', 'left', 'Square', 'right']] ,
+        CircleSquareTriangleSphereCubePyramid:  [['Circle', 'left', 'Square', 'middle'], ['Circle', 'left', 'Triangle', 'right'], ['Square', 'middle', 'Triangle', 'right']] ,
+        CircleSquareTriangleSpherePrismPrism:  [['Square', 'middle', 'Circle', 'left'], ['Circle', 'left', 'Triangle', 'right']] ,
+        CircleSquareTriangleCubePyramidSphere:  [['Square', 'left', 'Triangle', 'middle'], ['Square', 'middle', 'Circle', 'right']] ,
+        CircleSquareTriangleCubeSpherePyramid:  [['Square', 'left', 'Triangle', 'right'], ['Circle', 'middle', 'Triangle', 'right']] ,
+        CircleSquareTriangleCubeConeCone:  [['Square', 'left', 'Triangle', 'middle'], ['Square', 'middle', 'Triangle', 'right']] ,
+        CircleSquareTriangleConeCubeCone:  [['Circle', 'left', 'Square', 'middle'], ['Square', 'middle', 'Triangle', 'right']] ,
+        CircleSquareTriangleConeConeCube:  [['Circle', 'left', 'Square', 'right']] ,
+        CircleSquareTriangleConeCylinderPrism:  [['Circle', 'left', 'Square', 'middle'], ['Circle', 'middle', 'Triangle', 'right']] ,
+        CircleSquareTriangleConePrismCylinder:  [['Circle', 'left', 'Square', 'middle']] ,
+        CircleSquareTriangleCylinderPyramidCylinder:  [['Circle', 'left', 'Triangle', 'middle']] ,
+        CircleSquareTriangleCylinderConePrism:  [['Circle', 'left', 'Triangle', 'middle'], ['Circle', 'middle', 'Triangle', 'right']] ,
+        CircleSquareTriangleCylinderCylinderPyramid:  [['Circle', 'left', 'Triangle', 'right'], ['Square', 'middle', 'Triangle', 'right']] ,
+        CircleSquareTriangleCylinderPrismCone:  [['Circle', 'left', 'Triangle', 'middle'], ['Square', 'middle', 'Triangle', 'right']] ,
+        CircleSquareTrianglePrismSpherePrism:  [['Circle', 'middle', 'Triangle', 'right']] ,
+        CircleSquareTrianglePrismConeCylinder:  [] ,
+        CircleSquareTrianglePrismCylinderCone:  [['Square', 'middle', 'Triangle', 'right']] ,
+        CircleSquareTrianglePrismPrismSphere:  [['Square', 'middle', 'Circle', 'right']] ,
+        CircleTriangleSquarePyramidSphereCube:  [['Triangle', 'left', 'Square', 'right'], ['Circle', 'middle', 'Square', 'right']] ,
+        CircleTriangleSquarePyramidCubeSphere:  [['Triangle', 'left', 'Square', 'middle'], ['Triangle', 'middle', 'Circle', 'right']] ,
+        CircleTriangleSquarePyramidCylinderCylinder:  [['Triangle', 'left', 'Square', 'middle'], ['Triangle', 'middle', 'Square', 'right']] ,
+        CircleTriangleSquareSpherePyramidCube:  [['Circle', 'left', 'Triangle', 'middle'], ['Circle', 'left', 'Square', 'right'], ['Triangle', 'middle', 'Square', 'right']] ,
+        CircleTriangleSquareSphereCubePyramid:  [['Square', 'middle', 'Circle', 'left'], ['Circle', 'left', 'Triangle', 'right']] ,
+        CircleTriangleSquareSpherePrismPrism:  [['Triangle', 'middle', 'Circle', 'left'], ['Circle', 'left', 'Square', 'right']] ,
+        CircleTriangleSquareCubePyramidSphere:  [['Square', 'left', 'Triangle', 'middle'], ['Triangle', 'middle', 'Circle', 'right']] ,
+        CircleTriangleSquareCubeSpherePyramid:  [['Square', 'left', 'Triangle', 'right'], ['Circle', 'middle', 'Square', 'right']] ,
+        CircleTriangleSquareCubeConeCone:  [['Square', 'left', 'Triangle', 'middle']] ,
+        CircleTriangleSquareConeCubeCone:  [['Circle', 'left', 'Square', 'middle']] ,
+        CircleTriangleSquareConeConeCube:  [['Circle', 'left', 'Square', 'right'], ['Triangle', 'middle', 'Square', 'right']] ,
+        CircleTriangleSquareConeCylinderPrism:  [['Circle', 'left', 'Square', 'middle'], ['Circle', 'middle', 'Square', 'right']] ,
+        CircleTriangleSquareConePrismCylinder:  [['Circle', 'left', 'Square', 'middle'], ['Triangle', 'middle', 'Square', 'right']] ,
+        CircleTriangleSquareCylinderPyramidCylinder:  [['Circle', 'left', 'Triangle', 'middle'], ['Triangle', 'middle', 'Square', 'right']] ,
+        CircleTriangleSquareCylinderConePrism:  [['Circle', 'left', 'Triangle', 'middle'], ['Circle', 'middle', 'Square', 'right']] ,
+        CircleTriangleSquareCylinderCylinderPyramid:  [['Circle', 'left', 'Triangle', 'right']] ,
+        CircleTriangleSquareCylinderPrismCone:  [['Circle', 'left', 'Triangle', 'middle']] ,
+        CircleTriangleSquarePrismSpherePrism:  [['Circle', 'middle', 'Square', 'right']] ,
+        CircleTriangleSquarePrismConeCylinder:  [['Triangle', 'middle', 'Square', 'right']] ,
+        CircleTriangleSquarePrismCylinderCone:  [] ,
+        CircleTriangleSquarePrismPrismSphere:  [['Triangle', 'middle', 'Circle', 'right']] ,
+        SquareCircleTrianglePyramidSphereCube:  [['Triangle', 'left', 'Circle', 'middle'], ['Circle', 'middle', 'Square', 'right']] ,
+        SquareCircleTrianglePyramidCubeSphere:  [['Triangle', 'left', 'Circle', 'right'], ['Square', 'middle', 'Triangle', 'right']] ,
+        SquareCircleTrianglePyramidCylinderCylinder:  [['Triangle', 'left', 'Circle', 'middle']] ,
+        SquareCircleTriangleSpherePyramidCube:  [['Circle', 'left', 'Triangle', 'middle'], ['Circle', 'middle', 'Square', 'right']] ,
+        SquareCircleTriangleSphereCubePyramid:  [['Circle', 'left', 'Triangle', 'right'], ['Square', 'middle', 'Triangle', 'right']] ,
+        SquareCircleTriangleSpherePrismPrism:  [['Circle', 'left', 'Triangle', 'middle'], ['Circle', 'middle', 'Triangle', 'right']] ,
+        SquareCircleTriangleCubePyramidSphere:  [['Triangle', 'middle', 'Square', 'left'], ['Square', 'left', 'Circle', 'right']] ,
+        SquareCircleTriangleCubeSpherePyramid:  [['Square', 'left', 'Circle', 'middle'], ['Square', 'left', 'Triangle', 'right'], ['Circle', 'middle', 'Triangle', 'right']] ,
+        SquareCircleTriangleCubeConeCone:  [['Circle', 'middle', 'Square', 'left'], ['Square', 'left', 'Triangle', 'right']] ,
+        SquareCircleTriangleConeCubeCone:  [['Square', 'middle', 'Triangle', 'right']] ,
+        SquareCircleTriangleConeConeCube:  [['Circle', 'middle', 'Square', 'right']] ,
+        SquareCircleTriangleConeCylinderPrism:  [['Circle', 'middle', 'Triangle', 'right']] ,
+        SquareCircleTriangleConePrismCylinder:  [] ,
+        SquareCircleTriangleCylinderPyramidCylinder:  [['Square', 'left', 'Triangle', 'middle']] ,
+        SquareCircleTriangleCylinderConePrism:  [['Square', 'left', 'Triangle', 'middle'], ['Circle', 'middle', 'Triangle', 'right']] ,
+        SquareCircleTriangleCylinderCylinderPyramid:  [['Square', 'left', 'Triangle', 'right'], ['Circle', 'middle', 'Triangle', 'right']] ,
+        SquareCircleTriangleCylinderPrismCone:  [['Square', 'left', 'Triangle', 'middle'], ['Square', 'middle', 'Triangle', 'right']] ,
+        SquareCircleTrianglePrismSpherePrism:  [['Square', 'left', 'Circle', 'middle'], ['Circle', 'middle', 'Triangle', 'right']] ,
+        SquareCircleTrianglePrismConeCylinder:  [['Square', 'left', 'Circle', 'middle']] ,
+        SquareCircleTrianglePrismCylinderCone:  [['Square', 'left', 'Circle', 'middle'], ['Square', 'middle', 'Triangle', 'right']] ,
+        SquareCircleTrianglePrismPrismSphere:  [['Square', 'left', 'Circle', 'right']] ,
+        SquareTriangleCirclePyramidSphereCube:  [['Triangle', 'left', 'Circle', 'middle'], ['Triangle', 'middle', 'Square', 'right']] ,
+        SquareTriangleCirclePyramidCubeSphere:  [['Triangle', 'left', 'Circle', 'right'], ['Square', 'middle', 'Circle', 'right']] ,
+        SquareTriangleCirclePyramidCylinderCylinder:  [['Triangle', 'left', 'Circle', 'middle'], ['Triangle', 'middle', 'Circle', 'right']] ,
+        SquareTriangleCircleSpherePyramidCube:  [['Circle', 'left', 'Triangle', 'middle'], ['Triangle', 'middle', 'Square', 'right']] ,
+        SquareTriangleCircleSphereCubePyramid:  [['Circle', 'left', 'Triangle', 'right'], ['Square', 'middle', 'Circle', 'right']] ,
+        SquareTriangleCircleSpherePrismPrism:  [['Circle', 'left', 'Triangle', 'middle']] ,
+        SquareTriangleCircleCubePyramidSphere:  [['Square', 'left', 'Triangle', 'middle'], ['Square', 'left', 'Circle', 'right'], ['Triangle', 'middle', 'Circle', 'right']] ,
+        SquareTriangleCircleCubeSpherePyramid:  [['Circle', 'middle', 'Square', 'left'], ['Square', 'left', 'Triangle', 'right']] ,
+        SquareTriangleCircleCubeConeCone:  [['Triangle', 'middle', 'Square', 'left'], ['Square', 'left', 'Circle', 'right']] ,
+        SquareTriangleCircleConeCubeCone:  [['Square', 'middle', 'Circle', 'right']] ,
+        SquareTriangleCircleConeConeCube:  [['Triangle', 'middle', 'Square', 'right']] ,
+        SquareTriangleCircleConeCylinderPrism:  [] ,
+        SquareTriangleCircleConePrismCylinder:  [['Triangle', 'middle', 'Circle', 'right']] ,
+        SquareTriangleCircleCylinderPyramidCylinder:  [['Square', 'left', 'Triangle', 'middle'], ['Triangle', 'middle', 'Circle', 'right']] ,
+        SquareTriangleCircleCylinderConePrism:  [['Square', 'left', 'Triangle', 'middle']] ,
+        SquareTriangleCircleCylinderCylinderPyramid:  [['Square', 'left', 'Triangle', 'right']] ,
+        SquareTriangleCircleCylinderPrismCone:  [['Square', 'left', 'Triangle', 'middle'], ['Square', 'middle', 'Circle', 'right']] ,
+        SquareTriangleCirclePrismSpherePrism:  [['Square', 'left', 'Circle', 'middle']] ,
+        SquareTriangleCirclePrismConeCylinder:  [['Square', 'left', 'Circle', 'middle'], ['Triangle', 'middle', 'Circle', 'right']] ,
+        SquareTriangleCirclePrismCylinderCone:  [['Square', 'left', 'Circle', 'middle'], ['Square', 'middle', 'Circle', 'right']] ,
+        SquareTriangleCirclePrismPrismSphere:  [['Square', 'left', 'Circle', 'right'], ['Triangle', 'middle', 'Circle', 'right']] ,
+        TriangleCircleSquarePyramidSphereCube:  [['Triangle', 'left', 'Circle', 'middle'], ['Triangle', 'left', 'Square', 'right'], ['Circle', 'middle', 'Square', 'right']] ,
+        TriangleCircleSquarePyramidCubeSphere:  [['Square', 'middle', 'Triangle', 'left'], ['Triangle', 'left', 'Circle', 'right']] ,
+        TriangleCircleSquarePyramidCylinderCylinder:  [['Circle', 'middle', 'Triangle', 'left'], ['Triangle', 'left', 'Square', 'right']] ,
+        TriangleCircleSquareSpherePyramidCube:  [['Circle', 'left', 'Square', 'right'], ['Triangle', 'middle', 'Square', 'right']] ,
+        TriangleCircleSquareSphereCubePyramid:  [['Circle', 'left', 'Square', 'middle'], ['Circle', 'middle', 'Triangle', 'right']] ,
+        TriangleCircleSquareSpherePrismPrism:  [['Circle', 'left', 'Square', 'middle'], ['Circle', 'middle', 'Square', 'right']] ,
+        TriangleCircleSquareCubePyramidSphere:  [['Square', 'left', 'Circle', 'right'], ['Triangle', 'middle', 'Square', 'right']] ,
+        TriangleCircleSquareCubeSpherePyramid:  [['Square', 'left', 'Circle', 'middle'], ['Circle', 'middle', 'Triangle', 'right']] ,
+        TriangleCircleSquareCubeConeCone:  [['Square', 'left', 'Circle', 'middle']] ,
+        TriangleCircleSquareConeCubeCone:  [['Triangle', 'left', 'Square', 'middle']] ,
+        TriangleCircleSquareConeConeCube:  [['Triangle', 'left', 'Square', 'right'], ['Circle', 'middle', 'Square', 'right']] ,
+        TriangleCircleSquareConeCylinderPrism:  [['Triangle', 'left', 'Square', 'middle'], ['Circle', 'middle', 'Square', 'right']] ,
+        TriangleCircleSquareConePrismCylinder:  [['Triangle', 'left', 'Square', 'middle'], ['Triangle', 'middle', 'Square', 'right']] ,
+        TriangleCircleSquareCylinderPyramidCylinder:  [['Triangle', 'middle', 'Square', 'right']] ,
+        TriangleCircleSquareCylinderConePrism:  [['Circle', 'middle', 'Square', 'right']] ,
+        TriangleCircleSquareCylinderCylinderPyramid:  [['Circle', 'middle', 'Triangle', 'right']] ,
+        TriangleCircleSquareCylinderPrismCone:  [] ,
+        TriangleCircleSquarePrismSpherePrism:  [['Triangle', 'left', 'Circle', 'middle'], ['Circle', 'middle', 'Square', 'right']] ,
+        TriangleCircleSquarePrismConeCylinder:  [['Triangle', 'left', 'Circle', 'middle'], ['Triangle', 'middle', 'Square', 'right']] ,
+        TriangleCircleSquarePrismCylinderCone:  [['Triangle', 'left', 'Circle', 'middle']] ,
+        TriangleCircleSquarePrismPrismSphere:  [['Triangle', 'left', 'Circle', 'right']] ,
+        TriangleSquareCirclePyramidSphereCube:  [['Circle', 'middle', 'Triangle', 'left'], ['Triangle', 'left', 'Square', 'right']] ,
+        TriangleSquareCirclePyramidCubeSphere:  [['Triangle', 'left', 'Square', 'middle'], ['Triangle', 'left', 'Circle', 'right'], ['Square', 'middle', 'Circle', 'right']] ,
+        TriangleSquareCirclePyramidCylinderCylinder:  [['Square', 'middle', 'Triangle', 'left'], ['Triangle', 'left', 'Circle', 'right']] ,
+        TriangleSquareCircleSpherePyramidCube:  [['Circle', 'left', 'Square', 'right'], ['Triangle', 'middle', 'Circle', 'right']] ,
+        TriangleSquareCircleSphereCubePyramid:  [['Circle', 'left', 'Square', 'middle'], ['Square', 'middle', 'Triangle', 'right']] ,
+        TriangleSquareCircleSpherePrismPrism:  [['Circle', 'left', 'Square', 'middle']] ,
+        TriangleSquareCircleCubePyramidSphere:  [['Square', 'left', 'Circle', 'right'], ['Triangle', 'middle', 'Circle', 'right']] ,
+        TriangleSquareCircleCubeSpherePyramid:  [['Square', 'left', 'Circle', 'middle'], ['Square', 'middle', 'Triangle', 'right']] ,
+        TriangleSquareCircleCubeConeCone:  [['Square', 'left', 'Circle', 'middle'], ['Square', 'middle', 'Circle', 'right']] ,
+        TriangleSquareCircleConeCubeCone:  [['Triangle', 'left', 'Square', 'middle'], ['Square', 'middle', 'Circle', 'right']] ,
+        TriangleSquareCircleConeConeCube:  [['Triangle', 'left', 'Square', 'right']] ,
+        TriangleSquareCircleConeCylinderPrism:  [['Triangle', 'left', 'Square', 'middle']] ,
+        TriangleSquareCircleConePrismCylinder:  [['Triangle', 'left', 'Square', 'middle'], ['Triangle', 'middle', 'Circle', 'right']] ,
+        TriangleSquareCircleCylinderPyramidCylinder:  [['Triangle', 'middle', 'Circle', 'right']] ,
+        TriangleSquareCircleCylinderConePrism:  [] ,
+        TriangleSquareCircleCylinderCylinderPyramid:  [['Square', 'middle', 'Triangle', 'right']] ,
+        TriangleSquareCircleCylinderPrismCone:  [['Square', 'middle', 'Circle', 'right']] ,
+        TriangleSquareCirclePrismSpherePrism:  [['Triangle', 'left', 'Circle', 'middle']] ,
+        TriangleSquareCirclePrismConeCylinder:  [['Triangle', 'left', 'Circle', 'middle'], ['Triangle', 'middle', 'Circle', 'right']] ,
+        TriangleSquareCirclePrismCylinderCone:  [['Triangle', 'left', 'Circle', 'middle'], ['Square', 'middle', 'Circle', 'right']] ,
+        TriangleSquareCirclePrismPrismSphere:  [['Triangle', 'left', 'Circle', 'right'], ['Square', 'middle', 'Circle', 'right']]
+        },   
       insideCallouts: '',
       insideGuardianLeft: '',
       insideGuardianMiddle: '',
@@ -157,114 +285,17 @@
         }
         return retVal;
       },
-
-      neededSwaps: function() {
-        let retVal = {};
-
-        guardianNeededSymbols = function(shapes, inside, outside) {
-          mustSend = [];
-          const outsideObject = shapes.find(item => item.name === outside);
-
-          if (outsideObject.symbol1 === inside) {
-            mustSend.push(outsideObject.symbol1);
-          }
-
-          if (outsideObject.symbol2 === inside) {
-            mustSend.push(outsideObject.symbol2);
-          }
-
-          if (mustSend.length === 0 && outsideObject.symbol1 === outsideObject.symbol2) {
-            mustSend.push(outsideObject.symbol1);
-          }
-
-          return mustSend;
-        };
-
-        if(this.insideGuardianLeft) {
-          if(this.outsideGuardianLeft) {
-            retVal.left = guardianNeededSymbols(this.threeD, this.insideGuardianLeft, this.outsideGuardianLeft);
-          }
-        }
-        if(this.insideGuardianMiddle) {
-          if(this.outsideGuardianMiddle) {
-            retVal.middle = guardianNeededSymbols(this.threeD, this.insideGuardianMiddle, this.outsideGuardianMiddle);
-          }
-        }
-        if(this.insideGuardianRight) {
-          if(this.outsideGuardianRight) {
-            retVal.right = guardianNeededSymbols(this.threeD, this.insideGuardianRight, this.outsideGuardianRight);
-          }
-        }
-        return retVal;
-      },
-      displayNeededSymbols: function(symbolText) {
-        return symbolText.join(' <br/> ');
-      },
-      // This is garbage code but it works. Redo this to make it more elegant
-      displayNeededSteps: function(neededSwaps) {
-        if(neededSwaps.left && neededSwaps.middle && neededSwaps.right) {
-            steps = [];
-
-            while (neededSwaps.left.length > 0 || neededSwaps.middle.length > 0 || neededSwaps.right.length > 0) {
-                if (neededSwaps.left.length) {
-                    toSwap = neededSwaps.left.pop();
-                    // knowing a shape to get away from a guardian, if anyone needs two swaps, this definitely has to go there.
-                    // otherwise, if there are no aisles needing two swaps, either:
-                    // * we have the two swaps and can trade with anywhere
-                    // * there is only one other shape out of place, and we should swap with it
-                    if (neededSwaps.middle.length == 2) {
-                        toFind = neededSwaps.middle.pop();
-                        steps.push([toSwap, 'left', toFind, 'middle']);
-                    } else if (neededSwaps.right.length == 2) {
-                        toFind = neededSwaps.right.pop();
-                        steps.push([toSwap, 'left', toFind, 'right']);
-                    } else if (neededSwaps.middle.length == 1) {
-                        // it's possible that we're handling 'all outside aisles must swap one' e.g. SCT/Cylinder+Cone+Prism
-                        // we've popped left, pop middle and see if right needs one swap. if so, we'll actually need to swap the retrieved symbol again.
-                        toFind = neededSwaps.middle.pop();
-                        steps.push([toSwap, 'left', toFind, 'middle']);
-                        if (neededSwaps.left.length === 0 && neededSwaps.middle.length === 0 && neededSwaps.right.length == 1) {
-                            neededSwaps.left.push(toFind);
-                        }
-                    } else if (neededSwaps.right.length == 1) {
-                        toFind = neededSwaps.right.pop();
-                        steps.push([toSwap, 'left', toFind, 'right']);
-                    } else {
-                        console.log('wanted to swap ' + toSwap + ' from left, but couldnt ??');
-                        steps.push([undefined, undefined, undefined, undefined]);
-                        break;
-                    }
-                } else if (neededSwaps.middle.length) {
-                    toSwap = neededSwaps.middle.pop();
-                    if (neededSwaps.right.length) {
-                        toFind = neededSwaps.right.pop();
-                        steps.push([toSwap, 'middle', toFind, 'right']);
-                    } else {
-                        console.log('wanted to swap ' + toSwap + ' from middle, couldnt put it at right?? left should have taken this otherwise??');
-                        steps.push([undefined, undefined, undefined, undefined]);
-                        break;
-                    }
-                } else {
-                    // left needs zero or two swaps,
-                    // middle needs zero or two swaps,
-                    // but if any aisle needs two swaps both others need at least one to match
-                    // so if we are here then either we are done (should have exited the loop) or all aisles need two swaps.
-                    // break the tie, at which point the loop can converge.
-                    toSwap = neededSwaps.middle.pop();
-                    toFind = neededSwaps.right.pop();
-                    steps.push([toSwap, 'middle', toFind, 'right']);
-                }
+	  getSolution: function(){
+        if(this.insideGuardianLeft && this.insideGuardianMiddle && this.insideGuardianRight && this.outsideGuardianLeft && this.outsideGuardianMiddle && this.outsideGuardianRight){
+            var scenario = this.insideGuardianLeft + this.insideGuardianMiddle + this.insideGuardianRight + this.outsideGuardianLeft + this.outsideGuardianMiddle + this.outsideGuardianRight;
+            if (!this.solutionsMatrix.hasOwnProperty(scenario)){
+                return 'Unable to solve: inside or outside calls might be wrong';
             }
-
+            var steps = this.solutionsMatrix[scenario];
             step_strings = [];
-
             for (i = 0; i < steps.length; i++) {
-                if (steps[i].indexOf(undefined) >= 0) {
-                    return 'Unable to solve: inside or outside calls might be wrong';
-                }
                 step_strings.push(''.concat(i + 1, '. Place ', steps[i][0], ' on <b>', steps[i][1], '</b> and ', steps[i][2], ' on <b>', steps[i][3], '</b>'));
             }
-
             return step_strings.join('<br>');
         }
         return 'None';
@@ -609,7 +640,7 @@
                     </div>
                     <div class="font-bold text-lg">Steps</div>
                     <dtv>
-                        <span x-html="displayNeededSteps(neededSwaps())"></span>
+                        <span x-html="getSolution()"></span>
                     </dtv>
                 </div>
             </div>
